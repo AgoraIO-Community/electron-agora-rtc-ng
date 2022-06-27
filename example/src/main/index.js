@@ -1,6 +1,10 @@
-import { app, BrowserWindow, systemPreferences } from 'electron'
+import { app, BrowserWindow, systemPreferences , ipcMain, desktopCapturer} from 'electron'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
+
+ipcMain.handle('DESKTOP_CAPTURER_GET_SOURCES', (event, opts) =>
+  desktopCapturer.getSources(opts)
+)
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 app.allowRendererProcessReuse = false
@@ -17,12 +21,12 @@ function createMainWindow() {
   const window = new BrowserWindow({
     width: 1024,
     height: 728,
-    webPreferences: { nodeIntegration: true, contextIsolation: false },
+    webPreferences: { nodeIntegration: true, contextIsolation: false,devTools:false },
   })
 
   window.webContents.openDevTools({
     mode: 'detach',
-    activate: true,
+    activate: false,
   })
 
   if (isDevelopment) {

@@ -1,5 +1,8 @@
 import { Card, List } from 'antd'
 import creteAgoraRtcEngine, {
+  AudioProfileType,
+  AudioScenarioType,
+  ChannelProfileType,
   ClientRoleType,
   IAudioDeviceManager,
   IRtcEngine,
@@ -14,7 +17,11 @@ import { Component } from 'react'
 import DropDownButton from '../component/DropDownButton'
 import JoinChannelBar from '../component/JoinChannelBar'
 import SliderBar from '../component/SliderBar'
-import { AudioProfileList, AudioScenarioList } from '../config'
+import {
+  AudioProfileList,
+  AudioScenarioList,
+  ChannelProfileTypeMap,
+} from '../config'
 import config from '../config/agora.config'
 import styles from '../config/public.scss'
 import { configMapToOptions, getRandomInt } from '../util'
@@ -143,7 +150,10 @@ export default class JoinChannelAudio
 
   setAudioProfile = () => {
     const { audioProfile, audioScenario } = this.state
-    this.rtcEngine?.setAudioProfile(audioProfile, audioScenario)
+    this.rtcEngine?.setAudioProfile(
+      AudioProfileType.AudioProfileDefault,
+      AudioScenarioType.AudioScenarioGameStreaming
+    )
   }
 
   renderItem = ({ isMyself, uid }) => {
@@ -159,7 +169,7 @@ export default class JoinChannelAudio
     return (
       <div className={styles.rightBar}>
         <div>
-          <DropDownButton
+          {/* <DropDownButton
             options={configMapToOptions(AudioProfileList)}
             onPress={(res) =>
               this.setState({ audioProfile: res.dropId }, this.setAudioProfile)
@@ -172,7 +182,7 @@ export default class JoinChannelAudio
               this.setState({ audioScenario: res.dropId }, this.setAudioProfile)
             }
             title='Audio Scenario'
-          />
+          /> */}
           <DropDownButton
             title='Microphone'
             options={audioDevices.map((obj) => {
@@ -184,7 +194,7 @@ export default class JoinChannelAudio
             }}
           />
 
-          <SliderBar
+          {/* <SliderBar
             max={100}
             title='SDK Recording Volume'
             onChange={(value) => {
@@ -204,12 +214,22 @@ export default class JoinChannelAudio
             onChange={(value) => {
               this.rtcEngine?.adjustPlaybackSignalVolume(value)
             }}
+          /> */}
+          <DropDownButton
+            title='ChannelProfile'
+            options={configMapToOptions(ChannelProfileTypeMap)}
+            onPress={(res) => {
+              this.rtcEngine?.setChannelProfile(res.dropId)
+            }}
           />
         </div>
         <JoinChannelBar
           onPressJoin={(channelId) => {
             const rtcEngine = this.getRtcEngine()
-
+            this.rtcEngine?.setAudioProfile(
+              AudioProfileType.AudioProfileDefault,
+              AudioScenarioType.AudioScenarioGameStreaming
+            )
             rtcEngine.disableVideo()
             rtcEngine.enableAudio()
             rtcEngine.setClientRole(ClientRoleType.ClientRoleBroadcaster)

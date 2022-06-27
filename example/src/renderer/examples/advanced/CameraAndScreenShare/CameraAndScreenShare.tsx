@@ -1,4 +1,5 @@
 import { Card, Switch } from 'antd'
+import electron, { ipcRenderer } from "electron";
 import creteAgoraRtcEngine, {
   ClientRoleType,
   DegradationPreference,
@@ -23,6 +24,15 @@ import { configMapToOptions, getRandomInt } from '../../util'
 import { rgbImageBufferToBase64 } from '../../util/base64'
 import screenStyle from './CameraAndScreenShare.scss'
 
+const desktopCapturer = {
+  getSources: (opts) =>
+    ipcRenderer.invoke("DESKTOP_CAPTURER_GET_SOURCES", {
+      types: ["window", "screen"],
+    }),
+};
+//@ts-ignore
+window.desktopCapturer = desktopCapturer;
+
 const localUid1 = getRandomInt(1, 9999999)
 const localUid2 = getRandomInt(1, 9999999)
 
@@ -34,7 +44,6 @@ interface State {
   cameraDevices: Device[]
   firstCameraId: string
   enableShare: boolean
-  enableCamera: boolean
   currentFps?: number
   currentResolution?: { width: number; height: number }
   currentShareFps?: number
@@ -60,8 +69,8 @@ export default class CameraAndScreenShare
     isStart: false,
     cameraDevices: [],
     firstCameraId: '',
-    enableShare: false,
-    enableCamera: true,
+    enableShare: true,
+    // enableCamera: true,
     captureMouseCursor: true,
   }
 
@@ -93,6 +102,7 @@ export default class CameraAndScreenShare
     const imageList = list.map((item) =>
       rgbImageBufferToBase64(item.thumbImage)
     )
+    
 
     const formatList = list.map(
       ({ sourceName, sourceTitle, sourceId, type }, index) => ({
@@ -106,6 +116,7 @@ export default class CameraAndScreenShare
             : sourceTitle.replace(/\s+/g, '').substr(0, 20) + '...',
       })
     )
+    console.log(list,imageList,formatList);
     this.setState({ captureInfoList: formatList })
   }
 
@@ -126,38 +137,6 @@ export default class CameraAndScreenShare
     console.error(err, msg)
   }
 
-  startCameraCapture = (channelId: string) => {
-    const { firstCameraId, enableCamera } = this.state
-    if (!enableCamera) {
-      return
-    }
-    const rtcEngine = this.getRtcEngine()
-    let res = rtcEngine.startPrimaryCameraCapture({ deviceId: firstCameraId })
-    console.log('startPrimaryCameraCapture', res)
-
-    res = rtcEngine.joinChannelEx(
-      '',
-      {
-        localUid: localUid2,
-        channelId,
-      },
-      {
-        publishCameraTrack: true,
-        publishAudioTrack: false,
-        publishScreenTrack: false,
-        publishCustomAudioTrack: false,
-        publishCustomVideoTrack: false,
-        publishEncodedVideoTrack: false,
-        publishMediaPlayerAudioTrack: false,
-        publishMediaPlayerVideoTrack: false,
-        autoSubscribeAudio: false,
-        autoSubscribeVideo: false,
-        clientRoleType: 1,
-      }
-    )
-    console.log('joinChannelEx', res)
-  }
-
   startScreenCapture = (channelId: string) => {
     const {
       currentShareInfo,
@@ -166,44 +145,64 @@ export default class CameraAndScreenShare
       currentShareResolution,
       captureMouseCursor,
     } = this.state
-    if (!enableShare) {
-      return
-    }
+
     const { isScreen, sourceId } = currentShareInfo
     console.log(currentShareInfo)
 
     const rtcEngine = this.getRtcEngine()
     if (isScreen) {
-      this.rtcEngine.startScreenCaptureByDisplayId(
-        sourceId,
-        {
-          x: 0,
-          y: 0,
-          width: 0,
-          height: 0,
-        },
-        {
-          dimensions: currentShareResolution,
-          bitrate: 1000,
-          frameRate: currentFps,
-          captureMouseCursor,
-          windowFocus: false,
-          excludeWindowList: [],
-          excludeWindowCount: 0,
-        }
-      )
+      if (process.platform=='darwin') {
+        this.rtcEngine.startScreenCaptureByDisplayId(
+          sourceId,
+          {
+            x: 0,
+            y: 0,
+            ...currentShareResolution,
+          },
+          {
+            dimensions: currentShareResolution,
+  
+            frameRate: currentFps,
+            captureMouseCursor,
+            windowFocus: false,
+            excludeWindowList: [],
+            excludeWindowCount: 0,
+          }
+        )
+      } else {
+        this.rtcEngine.startScreenCaptureByScreenRect(
+          {
+            x: 0,
+            y: 0,
+            ...currentShareResolution,
+          },
+          {
+            x: 0,
+            y: 0,
+            ...currentShareResolution,
+          },
+          {
+            dimensions: currentShareResolution,
+  
+            frameRate: currentFps,
+            captureMouseCursor,
+            windowFocus: false,
+            excludeWindowList: [],
+            excludeWindowCount: 0,
+          }
+        )
+      }
+      
     } else {
       this.rtcEngine.startScreenCaptureByWindowId(
         sourceId,
         {
           x: 0,
           y: 0,
-          width: 0,
-          height: 0,
+          ...currentShareResolution,
         },
         {
           dimensions: currentShareResolution,
-          bitrate: 1000,
           frameRate: currentFps,
           captureMouseCursor,
           windowFocus: false,
@@ -240,7 +239,6 @@ export default class CameraAndScreenShare
   onPressStart = async (channelId: string) => {
     this.setState({ channelId, isStart: true })
     await this.startScreenCapture(channelId)
-    await this.startCameraCapture(channelId)
 
     return false
   }
@@ -248,29 +246,12 @@ export default class CameraAndScreenShare
   onPressStop = () => {
     this.setState({ isStart: false })
     const rtcEngine = this.getRtcEngine()
-    rtcEngine.stopPrimaryScreenCapture()
+    
+    rtcEngine.stopScreenCapture();
 
     const { channelId } = this.state
     rtcEngine.leaveChannelEx({ channelId, localUid: localUid1 })
     rtcEngine.leaveChannelEx({ channelId, localUid: localUid2 })
-  }
-
-  setVideoConfig = () => {
-    const { currentFps, currentResolution } = this.state
-    if (!currentResolution || !currentFps) {
-      return
-    }
-
-    this.getRtcEngine().setVideoEncoderConfiguration({
-      codecType: VideoCodecType.VideoCodecH264,
-      dimensions: currentResolution!,
-      frameRate: currentFps,
-      bitrate: 65,
-      minBitrate: 1,
-      orientationMode: OrientationMode.OrientationModeAdaptive,
-      degradationPreference: DegradationPreference.MaintainBalanced,
-      mirrorMode: VideoMirrorModeType.VideoMirrorModeAuto,
-    })
   }
 
   updateScreenCaptureParameters = () => {
@@ -303,12 +284,51 @@ export default class CameraAndScreenShare
   }
 
   renderRightBar = () => {
-    const { captureInfoList, cameraDevices, enableShare, enableCamera } =
+    const { captureInfoList, cameraDevices, enableShare } =
       this.state
     return (
       <div className={styles.rightBar}>
         <div>
           <div>Please Select camera and screen </div>
+
+          <DropDownButton
+            defaultIndex={0}
+            title='Share Window/Screen'
+            options={captureInfoList.map((obj) => ({
+              dropId: obj,
+              dropText: obj.sourceName || obj.sourceTitle,
+            }))}
+            // PopContent={this.renderPopup}
+            PopContentTitle='Preview'
+            onPress={(res) => {
+              const info = res.dropId
+              if (info === undefined) {
+                return
+              }
+              this.setState({ currentShareInfo: info })
+            }}
+          />
+          <DropDownButton
+            title='Resolution'
+            options={configMapToOptions(ResolutionMap)}
+            defaultIndex={configMapToOptions(ResolutionMap).length - 1}
+            onPress={(res) => {
+              this.setState(
+                { currentShareResolution: res.dropId },
+                this.updateScreenCaptureParameters
+              )
+            }}
+          />
+          <DropDownButton
+            title='FPS'
+            options={configMapToOptions(FpsMap)}
+            onPress={(res) => {
+              this.setState(
+                { currentShareFps: res.dropId },
+                this.updateScreenCaptureParameters
+              )
+            }}
+          />
           <div
             style={{
               display: 'flex',
@@ -316,130 +336,19 @@ export default class CameraAndScreenShare
               alignItems: 'center',
             }}
           >
-            {'Enable Camera:   '}
+            {'CaptureMouseCursor'}
             <Switch
               checkedChildren='Enable'
               unCheckedChildren='Disable'
-              defaultChecked={enableCamera}
-              onChange={(value) => {
-                this.setState({ enableCamera: value })
+              defaultChecked={false}
+              onChange={(enable) => {
+                this.setState(
+                  { captureMouseCursor: enable },
+                  this.updateScreenCaptureParameters
+                )
               }}
             />
           </div>
-          {enableCamera && (
-            <>
-              <DropDownButton
-                options={cameraDevices.map((obj) => {
-                  const { deviceId, deviceName } = obj
-                  return { dropId: deviceId, dropText: deviceName, ...obj }
-                })}
-                onPress={(res) => {
-                  const deviceId = res.dropId
-                  this.setState({ firstCameraId: deviceId })
-                }}
-                title='Camera Device'
-              />
-              <DropDownButton
-                title='Resolution'
-                options={configMapToOptions(ResolutionMap)}
-                onPress={(res) => {
-                  this.setState(
-                    { currentResolution: res.dropId },
-                    this.setVideoConfig
-                  )
-                }}
-              />
-              <DropDownButton
-                title='FPS'
-                options={configMapToOptions(FpsMap)}
-                onPress={(res) => {
-                  this.setState({ currentFps: res.dropId }, this.setVideoConfig)
-                }}
-              />
-            </>
-          )}
-          <br />
-          <div
-            style={{
-              display: 'flex',
-              textAlign: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {'Enable Share:   '}
-            <Switch
-              checkedChildren='Enable'
-              unCheckedChildren='Disable'
-              defaultChecked={enableShare}
-              onChange={(value) => {
-                this.setState({ enableShare: value })
-              }}
-            />
-          </div>
-          {!enableShare && (
-            <DropDownButton
-              defaultIndex={0}
-              title='Share Window/Screen'
-              options={captureInfoList.map((obj) => ({
-                dropId: obj,
-                dropText: obj.sourceName || obj.sourceTitle,
-              }))}
-              PopContent={this.renderPopup}
-              PopContentTitle='Preview'
-              onPress={(res) => {
-                const info = res.dropId
-                if (info === undefined) {
-                  return
-                }
-                this.setState({ currentShareInfo: info })
-              }}
-            />
-          )}
-          {enableShare && (
-            <>
-              <DropDownButton
-                title='Resolution'
-                options={configMapToOptions(ResolutionMap)}
-                defaultIndex={configMapToOptions(ResolutionMap).length - 1}
-                onPress={(res) => {
-                  this.setState(
-                    { currentShareResolution: res.dropId },
-                    this.updateScreenCaptureParameters
-                  )
-                }}
-              />
-              <DropDownButton
-                title='FPS'
-                options={configMapToOptions(FpsMap)}
-                onPress={(res) => {
-                  this.setState(
-                    { currentShareFps: res.dropId },
-                    this.updateScreenCaptureParameters
-                  )
-                }}
-              />
-              <div
-                style={{
-                  display: 'flex',
-                  textAlign: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                {'CaptureMouseCursor'}
-                <Switch
-                  checkedChildren='Enable'
-                  unCheckedChildren='Disable'
-                  defaultChecked={false}
-                  onChange={(enable) => {
-                    this.setState(
-                      { captureMouseCursor: enable },
-                      this.updateScreenCaptureParameters
-                    )
-                  }}
-                />
-              </div>
-            </>
-          )}
         </div>
         <JoinChannelBar
           buttonTitle='Start'
@@ -452,7 +361,7 @@ export default class CameraAndScreenShare
   }
 
   render() {
-    const { isStart, channelId, enableCamera, enableShare } = this.state
+    const { isStart, channelId, enableShare } = this.state
     return (
       <div className={styles.screen}>
         <div className={styles.content}>
@@ -464,16 +373,6 @@ export default class CameraAndScreenShare
                     uid={localUid1}
                     rtcEngine={this.rtcEngine!}
                     videoSourceType={VideoSourceType.VideoSourceScreenPrimary}
-                    channelId={channelId}
-                  />
-                </Card>
-              )}
-              {enableCamera && (
-                <Card title='Local Camera' className={styles.card}>
-                  <Window
-                    uid={localUid2}
-                    rtcEngine={this.rtcEngine!}
-                    videoSourceType={VideoSourceType.VideoSourceCamera}
                     channelId={channelId}
                   />
                 </Card>

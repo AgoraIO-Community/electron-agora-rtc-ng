@@ -23,7 +23,12 @@ import { Component } from 'react'
 import DropDownButton from '../component/DropDownButton'
 import JoinChannelBar from '../component/JoinChannelBar'
 import Window from '../component/Window'
-import { FpsMap, ResolutionMap, RoleTypeMap } from '../config'
+import {
+  ChannelProfileTypeMap,
+  FpsMap,
+  ResolutionMap,
+  RoleTypeMap,
+} from '../config'
 import config from '../config/agora.config'
 import styles from '../config/public.scss'
 import { configMapToOptions, getRandomInt } from '../util'
@@ -51,6 +56,7 @@ interface State {
   firstCameraId: string
   secondCameraId: string
   isPreview: boolean
+  channelProfile: ChannelProfileType
 }
 
 export default class JoinChannelVideo
@@ -74,6 +80,7 @@ export default class JoinChannelVideo
     currentResolution: ResolutionMap['120x120'],
     currentFps: FpsMap['15fps'],
     isPreview: false,
+    channelProfile: ChannelProfileType.ChannelProfileCommunication,
   }
 
   componentDidMount() {
@@ -175,13 +182,17 @@ export default class JoinChannelVideo
     this.setState({ channelId })
     this.rtcEngine.enableAudio()
     this.rtcEngine.enableVideo()
-    this.rtcEngine?.setChannelProfile(
-      ChannelProfileType.ChannelProfileLiveBroadcasting
-    )
+
     this.rtcEngine?.setAudioProfile(
       AudioProfileType.AudioProfileDefault,
-      AudioScenarioType.AudioScenarioChatroom
+      AudioScenarioType.AudioScenarioGameStreaming
     )
+    this.getRtcEngine().setVideoEncoderConfiguration({
+      codecType: VideoCodecType.VideoCodecH264,
+      dimensions: { width: 640, height: 320 },
+      frameRate: 15,
+      bitrate: 800,
+    })
 
     // const start2Res = this.rtcEngine?.startSecondaryCameraCapture({
     //   deviceId: secondCameraId,
@@ -202,7 +213,7 @@ export default class JoinChannelVideo
       {
         publishCameraTrack: true,
         clientRoleType: ClientRoleType.ClientRoleBroadcaster,
-        channelProfile: ChannelProfileType.ChannelProfileCommunication,
+        channelProfile: this.state.channelProfile,
       }
     )
     console.log(`localUid1: ${localUid1} joinChannel2: ${res1}`)
@@ -229,13 +240,9 @@ export default class JoinChannelVideo
 
     this.getRtcEngine().setVideoEncoderConfiguration({
       codecType: VideoCodecType.VideoCodecH264,
-      dimensions: currentResolution!,
-      frameRate: currentFps,
-      bitrate: 65,
-      minBitrate: 1,
-      orientationMode: OrientationMode.OrientationModeAdaptive,
-      degradationPreference: DegradationPreference.MaintainBalanced,
-      mirrorMode: VideoMirrorModeType.VideoMirrorModeAuto,
+      dimensions: { width: 640, height: 320 },
+      frameRate: 15,
+      bitrate: 800,
     })
   }
 
@@ -302,6 +309,14 @@ export default class JoinChannelVideo
             }}
           />
           <DropDownButton
+            title='ChannelProfile'
+            options={configMapToOptions(ChannelProfileTypeMap)}
+            onPress={(res) => {
+              this.setState({ channelProfile: res.dropId })
+              this.rtcEngine?.setChannelProfile(res.dropId)
+            }}
+          />
+          {/* <DropDownButton
             title='Role'
             options={configMapToOptions(RoleTypeMap)}
             onPress={(res) => {
@@ -324,7 +339,7 @@ export default class JoinChannelVideo
             onPress={(res) => {
               this.setState({ currentFps: res.dropId }, this.setVideoConfig)
             }}
-          />
+          /> */}
           {!isJoined && (
             <Button onClick={this.onPressPreview}>Start Preview</Button>
           )}
