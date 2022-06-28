@@ -11,7 +11,7 @@ const { platform, packageVersion, arch, no_symbol } =
 
 const workspaceDir = `${path.join(__dirname, "..")}`;
 
-const addonVersion = "3.8.201-alpha.627";
+const addonVersion = "3.8.201-alpha.629";
 
 const getDownloadURL = () => {
   let downloadUrl = `http://download.agora.io/sdk/release/Electron-${getOS()}-${addonVersion}-napi.zip`;
@@ -88,9 +88,9 @@ module.exports = async (cb) => {
       extract: true,
     });
   } catch (error) {
-    logger.error(errStr);
+    logger.error(error);
     logger.error("Agora sdk download base sdk error");
-    throw new Error(errStr);
+    throw new Error(error);
   }
 
   if (no_symbol) {
