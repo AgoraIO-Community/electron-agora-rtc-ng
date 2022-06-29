@@ -47,7 +47,7 @@ export default class JoinChannelAudio
   extends Component<State>
   implements IRtcEngineEventHandler
 {
-  rtcEngine?: IRtcEngineEx & IRtcEngine & RtcEngineExImplInternal
+  rtcEngine?: IRtcEngineEx
 
   audioDeviceManager: IAudioDeviceManager
 

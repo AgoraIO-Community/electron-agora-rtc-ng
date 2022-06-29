@@ -61,7 +61,7 @@ export default class CameraAndScreenShare
 {
   videoDeviceManager: IVideoDeviceManager
 
-  rtcEngine?: IRtcEngineEx & IRtcEngine & RtcEngineExImplInternal
+  rtcEngine?: IRtcEngineEx
 
   state: State = {
     captureInfoList: [],
