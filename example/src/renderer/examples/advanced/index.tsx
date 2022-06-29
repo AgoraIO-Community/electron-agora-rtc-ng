@@ -7,6 +7,8 @@ import DirectCdnStreaming from './DirectCdnStreaming/DirectCdnStreaming'
 import LocalVideoTranscoder from './LocalVideoTranscoder/LocalVideoTranscoder'
 import MediaPlayer from './MediaPlayer/MediaPlayer'
 import MultipleChannel from './MultipleChannel/MultipleChannel'
+import MultipleWindowRender from './MultipleWindowReceiver/MultipleWindowReceiver'
+import MultipleWindowSender from './MultipleWindowSender/MultipleWindowSender'
 import RhythmPlayer from './RhythmPlayer/RhythmPlayer'
 import ScreenShare from './ScreenShare/ScreenShare'
 import SendMetaData from './SendMetaData/SendMetaData'
@@ -19,6 +21,7 @@ import VoiceChanger from './VoiceChanger/VoiceChanger'
 
 const advanceRoute = [
   { path: '/AudioMixing', component: AudioMixing, title: 'AudioMixing' },
+
   // {
   //   path: '/CameraAndScreenShare',
   //   component: CameraAndScreenShare,
@@ -54,6 +57,16 @@ const advanceRoute = [
     path: '/MultipleChannel',
     component: MultipleChannel,
     title: 'MultipleChannel',
+  },
+  {
+    path: '/MultipleWindowSender',
+    component: MultipleWindowSender,
+    title: 'MultipleWindowSender',
+  },
+  {
+    path: '/MultipleWindowRender',
+    component: MultipleWindowRender,
+    title: 'MultipleWindowRender',
   },
   { path: '/RhythmPlayer', component: RhythmPlayer, title: 'RhythmPlayer' },
   // { path: '/ScreenShare', component: ScreenShare, title: 'ScreenShare' },

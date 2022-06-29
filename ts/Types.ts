@@ -81,8 +81,8 @@ export interface ShareVideoFrame {
   vBuffer: Buffer | Uint8Array;
   mirror?: boolean;
   rotation?: number;
-  uid?: number;
-  channelId?: string;
+  uid: number;
+  channelId: string;
   videoSourceType: VideoSourceType;
 }
 export interface Result {

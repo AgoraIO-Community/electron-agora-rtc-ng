@@ -137,11 +137,11 @@ class RendererManager {
     render.setRenderOption(rendererOptions);
 
     // enable iris videoFrame
-    this.enableVideoFrameCache({
-      uid,
-      channelId,
-      videoSourceType,
-    });
+    // this.enableVideoFrameCache({
+    //   uid,
+    //   channelId,
+    //   videoSourceType,
+    // });
 
     // enable render
     this.enableRender(true);
@@ -249,69 +249,70 @@ class RendererManager {
     }
   }
 
+  private renderFunc = (
+    rendererItem: RenderConfig,
+    { videoSourceType, channelId, uid }: VideoFrameCacheConfig
+  ) => {
+    const { renders } = rendererItem;
+    if (!renders || renders?.length === 0) {
+      return;
+    }
+    let finalResult = this.msgBridge.GetVideoStreamData(
+      rendererItem.shareVideoFrame
+    );
+
+    switch (finalResult.ret) {
+      case 0:
+        // IRIS_VIDEO_PROCESS_ERR::ERR_OK = 0,
+        // everything is ok
+        break;
+      case 1:
+        // IRIS_VIDEO_PROCESS_ERR::ERR_NULL_POINTER = 1,
+        break;
+      case 2: // IRIS_VIDEO_PROCESS_ERR::ERR_SIZE_NOT_MATCHING
+        const { width, height } = finalResult;
+        const newShareVideoFrame = this.resizeShareVideoFrame(
+          videoSourceType,
+          channelId,
+          uid,
+          width,
+          height
+        );
+        rendererItem.shareVideoFrame = newShareVideoFrame;
+        finalResult = this.msgBridge.GetVideoStreamData(newShareVideoFrame);
+        break;
+      case 5:
+        // IRIS_VIDEO_PROCESS_ERR::ERR_BUFFER_EMPTY
+        // setupVideo/AgoraView render before initialize
+        this.enableVideoFrameCache({ videoSourceType, channelId, uid });
+        return;
+      default:
+        return;
+    }
+    if (finalResult.ret !== 0) {
+      logWarn("GetVideoStreamData ret is", finalResult.ret, rendererItem);
+      return;
+    }
+    if (!finalResult.isNewFrame) {
+      logDebug("GetVideoStreamData isNewFrame is false", rendererItem);
+      return;
+    }
+    const renderVideoFrame = rendererItem.shareVideoFrame;
+    if (renderVideoFrame.width > 0 && renderVideoFrame.height > 0) {
+      renders.forEach((renderItem) => {
+        renderItem.drawFrame(rendererItem.shareVideoFrame);
+      });
+    }
+  };
+
   public startRenderer(): void {
     this.isRendering = true;
-    const renderFunc = (
-      rendererItem: RenderConfig,
-      { videoSourceType, channelId, uid }: VideoFrameCacheConfig
-    ) => {
-      const { renders } = rendererItem;
-      if (!renders || renders?.length === 0) {
-        return;
-      }
-      let finalResult = this.msgBridge.GetVideoStreamData(
-        rendererItem.shareVideoFrame
-      );
-
-      switch (finalResult.ret) {
-        case 0:
-          // IRIS_VIDEO_PROCESS_ERR::ERR_OK = 0,
-          // everything is ok
-          break;
-        case 1:
-          // IRIS_VIDEO_PROCESS_ERR::ERR_NULL_POINTER = 1,
-          break;
-        case 2: // IRIS_VIDEO_PROCESS_ERR::ERR_SIZE_NOT_MATCHING
-          const { width, height } = finalResult;
-          const newShareVideoFrame = this.resizeShareVideoFrame(
-            videoSourceType,
-            channelId,
-            uid,
-            width,
-            height
-          );
-          rendererItem.shareVideoFrame = newShareVideoFrame;
-          finalResult = this.msgBridge.GetVideoStreamData(newShareVideoFrame);
-          break;
-        case 5:
-          // IRIS_VIDEO_PROCESS_ERR::ERR_BUFFER_EMPTY
-          // setupVideo/AgoraView render before initialize
-          this.enableVideoFrameCache({ videoSourceType, channelId, uid });
-          return;
-        default:
-          return;
-      }
-      if (finalResult.ret !== 0) {
-        logWarn("GetVideoStreamData ret is", finalResult.ret, rendererItem);
-        return;
-      }
-      if (!finalResult.isNewFrame) {
-        logDebug("GetVideoStreamData isNewFrame is false", rendererItem);
-        return;
-      }
-      const renderVideoFrame = rendererItem.shareVideoFrame;
-      if (renderVideoFrame.width > 0 && renderVideoFrame.height > 0) {
-        renders.forEach((renderItem) => {
-          renderItem.drawFrame(rendererItem.shareVideoFrame);
-        });
-      }
-    };
     this.videoFrameUpdateInterval = setInterval(() => {
       if (!AgoraEnv.isInitializeEngine) {
         logDebug("rtcEngine is not initialize");
         return;
       }
-      this.forEachStream(renderFunc);
+      this.forEachStream(this.renderFunc);
     }, 1000 / this.renderFps);
   }
 
@@ -490,20 +491,71 @@ class RendererManager {
     };
   }
 
-  private updateVideoFrameCacheInMap(
-    config: VideoFrameCacheConfig,
-    shareVideoFrame: ShareVideoFrame
-  ): void {
-    let rendererConfigMap = this.ensureRendererConfig(config);
+  private updateVideoFrameCacheInMap(shareVideoFrame: ShareVideoFrame): void {
+    let rendererConfigMap = this.ensureRendererConfig(shareVideoFrame);
     rendererConfigMap
       ? //@ts-ignore
         Object.assign(rendererConfigMap.get(config.uid), {
           shareVideoFrame,
         })
       : logWarn(
-          `updateVideoFrameCacheInMap videoSourceType:${config.videoSourceType} channelId:${config.channelId} uid:${config.uid} rendererConfigMap is null`
+          `updateVideoFrameCacheInMap videoSourceType:${shareVideoFrame.videoSourceType} channelId:${shareVideoFrame.channelId} uid:${shareVideoFrame.uid} rendererConfigMap is null`
         );
   }
+
+  registerRawDataReceiverPort(port: MessagePort) {
+    AgoraEnv.isInitializeEngine = true;
+    port.onmessage = (e) => {
+      const videoFrame = e.data as ShareVideoFrame;
+      this.updateVideoFrameCacheInMap(videoFrame);
+    };
+  }
+
+  registerRawDataSenderPort(port: MessagePort) {
+    port.onmessage = (e) => {
+      const videoFrame = e.data as ShareVideoFrame;
+      const result = this.getLatestVideoFrame(videoFrame);
+      if (result.resultCode === 0 || result.resultCode === 2) {
+        port.postMessage(result.videoFrame);
+      }
+    };
+  }
+
+  getLatestVideoFrame = (
+    videoFrame: ShareVideoFrame
+  ): { resultCode: number; videoFrame?: ShareVideoFrame } => {
+    let finalResult = this.msgBridge.GetVideoStreamData(videoFrame);
+    let finalVideoFrame: ShareVideoFrame = videoFrame;
+    const { channelId, videoSourceType, uid } = videoFrame;
+    switch (finalResult.ret) {
+      case 0:
+        // IRIS_VIDEO_PROCESS_ERR::ERR_OK = 0,
+        // everything is ok
+        return { resultCode: 0, videoFrame };
+      case 1:
+        // IRIS_VIDEO_PROCESS_ERR::ERR_NULL_POINTER = 1,
+        return { resultCode: 1 };
+      case 2: // IRIS_VIDEO_PROCESS_ERR::ERR_SIZE_NOT_MATCHING
+        const { width, height } = finalResult;
+        const newShareVideoFrame = this.resizeShareVideoFrame(
+          videoSourceType,
+          channelId,
+          uid,
+          width,
+          height
+        );
+        finalVideoFrame = newShareVideoFrame;
+        finalResult = this.msgBridge.GetVideoStreamData(newShareVideoFrame);
+        return { resultCode: 2, videoFrame };
+      case 5:
+        // IRIS_VIDEO_PROCESS_ERR::ERR_BUFFER_EMPTY
+        // setupVideo/AgoraView render before initialize
+        this.enableVideoFrameCache({ videoSourceType, channelId, uid });
+        return { resultCode: 5 };
+      default:
+        return { resultCode: finalResult.ret };
+    }
+  };
 }
 
 const AgoraRendererManager = new RendererManager();

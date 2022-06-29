@@ -29,6 +29,8 @@ export class YUVCanvasRenderer extends IRenderer {
       uBuffer: new Uint8Array(0),
       vBuffer: new Uint8Array(0),
       videoSourceType: -1,
+      channelId: "",
+      uid: 0,
     };
   }
 
