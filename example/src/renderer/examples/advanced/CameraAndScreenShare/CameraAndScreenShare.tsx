@@ -3,6 +3,7 @@ import electron, { ipcRenderer } from "electron";
 import creteAgoraRtcEngine, {
   ClientRoleType,
   DegradationPreference,
+  ErrorCodeType,
   IRtcEngine,
   IRtcEngineEventHandler,
   IRtcEngineEx,
@@ -133,7 +134,7 @@ export default class CameraAndScreenShare
     return this.rtcEngine
   }
 
-  onError(err: number, msg: string): void {
+  onError(err: ErrorCodeType, msg: string): void {
     console.error(err, msg)
   }
 
