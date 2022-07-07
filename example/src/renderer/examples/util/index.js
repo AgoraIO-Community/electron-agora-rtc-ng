@@ -28,6 +28,22 @@ export const getResourcePath = (filePath = './') => {
   }
   return resourcePath
 }
+export const getSDKPath = (filePath = './') => {
+  let resourcePath
+  if (isDebug()) {
+    resourcePath = path.resolve(
+      `${__dirname}`,
+      '../../../../node_modules/electron-agora-rtc-ng/build/Release',
+      filePath
+    )
+  } else {
+    resourcePath = path.resolve(
+      `${process.resourcesPath}/app/node_modules/electron-agora-rtc-ng/build/Release`,
+      filePath
+    )
+  }
+  return resourcePath
+}
 
 export const getRandomInt = (min = 1, max = 99999) => {
   min = Math.ceil(min)

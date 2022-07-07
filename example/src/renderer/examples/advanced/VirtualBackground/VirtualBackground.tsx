@@ -30,7 +30,7 @@ import Window from '../../component/Window'
 import { FpsMap, ResolutionMap, RoleTypeMap } from '../../config'
 import config from '../../config/agora.config'
 import styles from '../../config/public.scss'
-import { configMapToOptions, getRandomInt, getResourcePath } from '../../util'
+import { configMapToOptions, getRandomInt, getResourcePath, getSDKPath } from '../../util'
 
 interface Device {
   deviceId: string
@@ -110,6 +110,10 @@ export default class VirtualBackground
       const res = this.rtcEngine.initialize({
         appId: config.appID,
       })
+      const path = getSDKPath('libagora_segmentation_extension.dll');
+      console.log('getResourcePath',path);
+      let res1=this.rtcEngine.loadExtensionProvider(path);
+      console.log('loadExtensionProvider',res1);
       this.rtcEngine.setLogFile(config.nativeSDKLogPath)
       console.log('initialize:', res)
     }
