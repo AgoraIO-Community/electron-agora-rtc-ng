@@ -1,3 +1,4 @@
+import { EncodedVideoFrameInfo } from './AgoraBase'
 
 /*
  * The type of the audio route.
@@ -32,43 +33,21 @@ RouteLoudspeaker = 4,
  */
 RouteHeadsetbluetooth = 5,
 /*
- * 7: (macOS only) The audio route is an HDMI peripheral device.
- */
-RouteHdmi = 6,
-/*
  * 6: (macOS only) The audio route is a USB peripheral device.
  */
-RouteUsb = 7,
-}
-
+RouteUsb = 6,
+/*
+ * 7: (macOS only) The audio route is an HDMI peripheral device.
+ */
+RouteHdmi = 7,
 /*
  * @ignore
  */
-export enum NlpAggressiveness {
+RouteDisplayport = 8,
 /*
  * @ignore
  */
-NlpNotSpecified = 0,
-/*
- * @ignore
- */
-NlpMild = 1,
-/*
- * @ignore
- */
-NlpNormal = 2,
-/*
- * @ignore
- */
-NlpAggressive = 3,
-/*
- * @ignore
- */
-NlpSuperAggressive = 4,
-/*
- * @ignore
- */
-NlpExtreme = 5,
+RouteAirplay = 9,
 }
 
 /*
@@ -178,6 +157,74 @@ UnknownMediaSource = 100,
 /*
  * @ignore
  */
+export enum ContentInspectResult {
+/*
+ * @ignore
+ */
+ContentInspectNeutral = 1,
+/*
+ * @ignore
+ */
+ContentInspectSexy = 2,
+/*
+ * @ignore
+ */
+ContentInspectPorn = 3,
+}
+
+/*
+ * @ignore
+ */
+export enum ContentInspectType {
+/*
+ * @ignore
+ */
+ContentInspectInvalid = 0,
+/*
+ * @ignore
+ */
+ContentInspectModeration = 1,
+/*
+ * @ignore
+ */
+ContentInspectSupervision = 2,
+}
+
+/*
+ * @ignore
+ */
+export class ContentInspectModule {
+/*
+ * @ignore
+ */
+  type?: ContentInspectType
+  /*
+   * @ignore
+   */
+  interval?: number
+}
+
+/*
+ * @ignore
+ */
+export class ContentInspectConfig {
+/*
+ * @ignore
+ */
+  extraInfo?: string
+  /*
+   * @ignore
+   */
+  modules?: ContentInspectModule[]
+  /*
+   * @ignore
+   */
+  moduleCount?: number
+}
+
+/*
+ * @ignore
+ */
 export class PacketOptions {
 /*
  * @ignore
@@ -187,35 +234,6 @@ export class PacketOptions {
    * @ignore
    */
   audioLevelIndication?: number
-}
-
-/*
- * The number of channels for audio preprocessing.
- * In scenarios that require enhanced realism, such as concerts, local users might need to capture stereo audio and send stereo signals to remote users. For example, the singer, guitarist, and drummer are standing in different positions on the stage. The audio capture device captures their stereo audio and sends stereo signals to remote users. Remote users can hear the song, guitar, and drum from different directions as if they were at the auditorium.
- * You can set the dual-channel processing to implement stereo audio in this class. Agora recommends the following settings:
- * Preprocessing: call setAdvancedAudioOptions and set audioProcessingChannels to AdvancedAudioOptions (2) in AudioProcessingStereo.
- * Post-processing: call setAudioProfile and set profile to AudioProfileMusicStandardStereo (3) or AudioProfileMusicHighQualityStereo (5). 
- * The stereo setting only takes effect when the SDK uses the media volume.
- */
-export enum AudioProcessingChannels {
-/*
- * 1: (Default) Mono.
- */
-AudioProcessingMono = 1,
-/*
- * 2: Stereo (two channels).
- */
-AudioProcessingStereo = 2,
-}
-
-/*
- * The advanced options for audio.
- */
-export class AdvancedAudioOptions {
-/*
- * The number of channels for audio preprocessing. See AudioProcessingChannels .
- */
-  audioProcessingChannels?: AudioProcessingChannels
 }
 
 /*
@@ -291,7 +309,7 @@ export enum VideoPixelFormat {
 /*
  * @ignore
  */
-VideoPixelUnknown = 0,
+VideoPixelDefault = 0,
 /*
  * @ignore
  */
@@ -320,6 +338,18 @@ VideoTexture2d = 10,
  * @ignore
  */
 VideoTextureOes = 11,
+/*
+ * @ignore
+ */
+VideoCvpixelNv12 = 12,
+/*
+ * @ignore
+ */
+VideoCvpixelI420 = 13,
+/*
+ * @ignore
+ */
+VideoCvpixelBgra = 14,
 /*
  * @ignore
  */
@@ -379,6 +409,150 @@ VideoBufferTexture = 3,
 /*
  * @ignore
  */
+export class ExternalVideoFrame {
+/*
+ * @ignore
+ */
+  type?: VideoBufferType
+  /*
+   * @ignore
+   */
+  format?: VideoPixelFormat
+  /*
+   * @ignore
+   */
+  buffer?: Uint8Array
+  /*
+   * @ignore
+   */
+  stride?: number
+  /*
+   * @ignore
+   */
+  height?: number
+  /*
+   * @ignore
+   */
+  cropLeft?: number
+  /*
+   * @ignore
+   */
+  cropTop?: number
+  /*
+   * @ignore
+   */
+  cropRight?: number
+  /*
+   * @ignore
+   */
+  cropBottom?: number
+  /*
+   * @ignore
+   */
+  rotation?: number
+  /*
+   * @ignore
+   */
+  timestamp?: number
+  /*
+   * @ignore
+   */
+  eglType?: EglContextType
+  /*
+   * @ignore
+   */
+  textureId?: number
+  /*
+   * @ignore
+   */
+  matrix?: number[]
+  /*
+   * @ignore
+   */
+  metadata_buffer?: Uint8Array
+  /*
+   * @ignore
+   */
+  metadata_size?: number
+}
+
+/*
+ * @ignore
+ */
+export class VideoFrame {
+/*
+ * @ignore
+ */
+  type?: VideoPixelFormat
+  /*
+   * @ignore
+   */
+  width?: number
+  /*
+   * @ignore
+   */
+  height?: number
+  /*
+   * @ignore
+   */
+  yStride?: number
+  /*
+   * @ignore
+   */
+  uStride?: number
+  /*
+   * @ignore
+   */
+  vStride?: number
+  /*
+   * @ignore
+   */
+  yBuffer?: Uint8Array
+  /*
+   * @ignore
+   */
+  uBuffer?: Uint8Array
+  /*
+   * @ignore
+   */
+  vBuffer?: Uint8Array
+  /*
+   * @ignore
+   */
+  rotation?: number
+  /*
+   * @ignore
+   */
+  renderTimeMs?: number
+  /*
+   * @ignore
+   */
+  avsync_type?: number
+  /*
+   * @ignore
+   */
+  metadata_buffer?: Uint8Array
+  /*
+   * @ignore
+   */
+  metadata_size?: number
+  /*
+   * @ignore
+   */
+  textureId?: number
+  /*
+   * @ignore
+   */
+  matrix?: number[]
+  /*
+   * @ignore
+   */
+  alphaBuffer?: Uint8Array
+}
+
+/*
+ * @ignore
+ */
 export enum MediaPlayerSourceType {
 /*
  * @ignore
@@ -429,6 +603,122 @@ FrameTypePcm16 = 0,
 /*
  * @ignore
  */
+export class AudioFrame {
+/*
+ * @ignore
+ */
+  type?: AudioFrameType
+  /*
+   * @ignore
+   */
+  samplesPerChannel?: number
+  /*
+   * @ignore
+   */
+  bytesPerSample?: BytesPerSample
+  /*
+   * @ignore
+   */
+  channels?: number
+  /*
+   * @ignore
+   */
+  samplesPerSec?: number
+  /*
+   * @ignore
+   */
+  buffer?: Uint8Array
+  /*
+   * @ignore
+   */
+  renderTimeMs?: number
+  /*
+   * @ignore
+   */
+  avsync_type?: number
+}
+
+/*
+ * @ignore
+ */
+export enum AudioFramePosition {
+/*
+ * @ignore
+ */
+AudioFramePositionNone = 0x0000,
+/*
+ * @ignore
+ */
+AudioFramePositionPlayback = 0x0001,
+/*
+ * @ignore
+ */
+AudioFramePositionRecord = 0x0002,
+/*
+ * @ignore
+ */
+AudioFramePositionMixed = 0x0004,
+/*
+ * @ignore
+ */
+AudioFramePositionBeforeMixing = 0x0008,
+}
+
+/*
+ * @ignore
+ */
+export class AudioParams {
+/*
+ * @ignore
+ */
+  sample_rate?: number
+  /*
+   * @ignore
+   */
+  channels?: number
+  /*
+   * @ignore
+   */
+  mode?: RawAudioFrameOpModeType
+  /*
+   * @ignore
+   */
+  samples_per_call?: number
+}
+
+/*
+ * @ignore
+ */
+export abstract class IAudioFrameObserverBase {
+/*
+ * @ignore
+ */
+  onRecordAudioFrame?(channelId: string, audioFrame: AudioFrame): boolean;
+
+  /*
+   * @ignore
+   */
+  onPlaybackAudioFrame?(channelId: string, audioFrame: AudioFrame): boolean;
+
+  /*
+   * @ignore
+   */
+  onMixedAudioFrame?(channelId: string, audioFrame: AudioFrame): boolean;
+}
+
+/*
+ * @ignore
+ */
+export abstract class IAudioFrameObserver extends IAudioFrameObserverBase {
+/*
+ * @ignore
+ */
+  onPlaybackAudioFrameBeforeMixing?(channelId: string, uid: number, audioFrame: AudioFrame): boolean;
+}
+
+/*
+ * @ignore
+ */
 export class AudioSpectrumData {
 /*
  * @ignore
@@ -457,6 +747,31 @@ export class UserAudioSpectrumInfo {
 /*
  * @ignore
  */
+export abstract class IAudioSpectrumObserver {
+/*
+ * @ignore
+ */
+  onLocalAudioSpectrum?(data: AudioSpectrumData): boolean;
+
+  /*
+   * @ignore
+   */
+  onRemoteAudioSpectrum?(spectrums: UserAudioSpectrumInfo[], spectrumNumber: number): boolean;
+}
+
+/*
+ * @ignore
+ */
+export abstract class IVideoEncodedFrameObserver {
+/*
+ * @ignore
+ */
+  OnEncodedVideoFrameReceived?(uid: number, imageBuffer: Uint8Array, length: number, videoEncodedFrameInfo: EncodedVideoFrameInfo): boolean;
+}
+
+/*
+ * @ignore
+ */
 export enum VideoFrameProcessMode {
 /*
  * @ignore
@@ -471,125 +786,61 @@ ProcessModeReadWrite = 1,
 /*
  * @ignore
  */
-export enum ContentInspectResult {
+export abstract class IVideoFrameObserver {
 /*
  * @ignore
  */
-ContentInspectNeutral = 1,
-/*
- * @ignore
- */
-ContentInspectSexy = 2,
-/*
- * @ignore
- */
-ContentInspectPorn = 3,
-}
+  onCaptureVideoFrame?(videoFrame: VideoFrame): boolean;
 
-/*
- * @ignore
- */
-export enum ContentInspectDeviceType {
-/*
- * @ignore
- */
-ContentInspectDeviceInvalid = 0,
-/*
- * @ignore
- */
-ContentInspectDeviceAgora = 1,
-/*
- * @ignore
- */
-ContentInspectDeviceHive = 2,
-/*
- * @ignore
- */
-ContentInspectDeviceTupu = 3,
-}
+  /*
+   * @ignore
+   */
+  onPreEncodeVideoFrame?(videoFrame: VideoFrame): boolean;
 
-/*
- * @ignore
- */
-export enum ContentInspectType {
-/*
- * @ignore
- */
-ContentInspectInvalide = 0,
-/*
- * @ignore
- */
-ContentInspectModeration = 1,
-/*
- * @ignore
- */
-ContentInspectSupervise = 2,
-}
+  /*
+   * @ignore
+   */
+  onSecondaryCameraCaptureVideoFrame?(videoFrame: VideoFrame): boolean;
 
-/*
- * @ignore
- */
-export class ContentInspectModule {
-/*
- * @ignore
- */
-  type?: ContentInspectType
   /*
    * @ignore
    */
-  frequency?: number
-}
+  onSecondaryPreEncodeCameraVideoFrame?(videoFrame: VideoFrame): boolean;
 
-/*
- * @ignore
- */
-export class ContentInspectConfig {
-/*
- * @ignore
- */
-  enable?: boolean
   /*
    * @ignore
    */
-  DeviceWork?: boolean
-  /*
-   * @ignore
-   */
-  CloudWork?: boolean
-  /*
-   * @ignore
-   */
-  DeviceworkType?: ContentInspectDeviceType
-  /*
-   * @ignore
-   */
-  extraInfo?: string
-  /*
-   * @ignore
-   */
-  modules?: ContentInspectModule[]
-  /*
-   * @ignore
-   */
-  moduleCount?: number
-}
+  onScreenCaptureVideoFrame?(videoFrame: VideoFrame): boolean;
 
-/*
- * @ignore
- */
-export class SnapShotConfig {
-/*
- * @ignore
- */
-  channel?: string
   /*
    * @ignore
    */
-  uid?: number
+  onPreEncodeScreenVideoFrame?(videoFrame: VideoFrame): boolean;
+
   /*
    * @ignore
    */
-  filePath?: string
+  onMediaPlayerVideoFrame?(videoFrame: VideoFrame, mediaPlayerId: number): boolean;
+
+  /*
+   * @ignore
+   */
+  onSecondaryScreenCaptureVideoFrame?(videoFrame: VideoFrame): boolean;
+
+  /*
+   * @ignore
+   */
+  onSecondaryPreEncodeScreenVideoFrame?(videoFrame: VideoFrame): boolean;
+
+  /*
+   * @ignore
+   */
+  onRenderVideoFrame?(channelId: string, remoteUid: number, videoFrame: VideoFrame): boolean;
+
+  /*
+   * @ignore
+   */
+  onTranscodedVideoFrame?(videoFrame: VideoFrame): boolean;
 }
 
 /*
@@ -604,4 +855,135 @@ VideoFrame = 0,
  * 1: The video frame is encoded.
  */
 EncodedVideoFrame = 1,
+}
+
+/*
+ * @ignore
+ */
+export enum MediaRecorderContainerFormat {
+/*
+ * @ignore
+ */
+FormatMp4 = 1,
+}
+
+/*
+ * @ignore
+ */
+export enum MediaRecorderStreamType {
+/*
+ * @ignore
+ */
+StreamTypeAudio = 0x01,
+/*
+ * @ignore
+ */
+StreamTypeVideo = 0x02,
+/*
+ * @ignore
+ */
+StreamTypeBoth = 0x01 | 0x02,
+}
+
+/*
+ * @ignore
+ */
+export enum RecorderState {
+/*
+ * @ignore
+ */
+RecorderStateError = -1,
+/*
+ * @ignore
+ */
+RecorderStateStart = 2,
+/*
+ * @ignore
+ */
+RecorderStateStop = 3,
+}
+
+/*
+ * @ignore
+ */
+export enum RecorderErrorCode {
+/*
+ * @ignore
+ */
+RecorderErrorNone = 0,
+/*
+ * @ignore
+ */
+RecorderErrorWriteFailed = 1,
+/*
+ * @ignore
+ */
+RecorderErrorNoStream = 2,
+/*
+ * @ignore
+ */
+RecorderErrorOverMaxDuration = 3,
+/*
+ * @ignore
+ */
+RecorderErrorConfigChanged = 4,
+}
+
+/*
+ * @ignore
+ */
+export class MediaRecorderConfiguration {
+/*
+ * @ignore
+ */
+  storagePath?: string
+  /*
+   * @ignore
+   */
+  containerFormat?: MediaRecorderContainerFormat
+  /*
+   * @ignore
+   */
+  streamType?: MediaRecorderStreamType
+  /*
+   * @ignore
+   */
+  maxDurationMs?: number
+  /*
+   * @ignore
+   */
+  recorderInfoUpdateInterval?: number
+}
+
+/*
+ * @ignore
+ */
+export class RecorderInfo {
+/*
+ * @ignore
+ */
+  fileName?: string
+  /*
+   * @ignore
+   */
+  durationMs?: number
+  /*
+   * @ignore
+   */
+  fileSize?: number
+}
+
+/*
+ * @ignore
+ */
+export abstract class IMediaRecorderObserver {
+/*
+ * @ignore
+ */
+  onRecorderStateChanged?(state: RecorderState, error: RecorderErrorCode): void;
+
+  /*
+   * @ignore
+   */
+  onRecorderInfoUpdated?(info: RecorderInfo): void;
 }

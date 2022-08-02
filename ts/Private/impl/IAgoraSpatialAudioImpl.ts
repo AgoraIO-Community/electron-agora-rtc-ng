@@ -1,34 +1,6 @@
 import { callIrisApi } from '../internal/IrisApiEngine'
-import { ICloudSpatialAudioEventHandler, IBaseSpatialAudioEngine, RemoteVoicePositionInfo, ICloudSpatialAudioEngine, CloudSpatialAudioConfig, AudioRangeModeType, ILocalSpatialAudioEngine, LocalSpatialAudioConfig } from '../IAgoraSpatialAudio'
+import { IBaseSpatialAudioEngine, RemoteVoicePositionInfo, ILocalSpatialAudioEngine } from '../IAgoraSpatialAudio'
 import { RtcConnection } from '../IAgoraRtcEngineEx'
-
-export function processICloudSpatialAudioEventHandler (handler: ICloudSpatialAudioEventHandler, event: string, jsonParams: any) {
-  switch (event) {
-    case 'onTokenWillExpire':
-      if (handler.onTokenWillExpire !== undefined) {
-        handler.onTokenWillExpire()
-      }
-      break
-
-    case 'onConnectionStateChange':
-      if (handler.onConnectionStateChange !== undefined) {
-        handler.onConnectionStateChange(jsonParams.state, jsonParams.reason)
-      }
-      break
-
-    case 'onTeammateLeft':
-      if (handler.onTeammateLeft !== undefined) {
-        handler.onTeammateLeft(jsonParams.uid)
-      }
-      break
-
-    case 'onTeammateJoined':
-      if (handler.onTeammateJoined !== undefined) {
-        handler.onTeammateJoined(jsonParams.uid)
-      }
-      break
-  }
-}
 
 export class IBaseSpatialAudioEngineImpl implements IBaseSpatialAudioEngine {
   release (): void {
@@ -169,140 +141,10 @@ export class IBaseSpatialAudioEngineImpl implements IBaseSpatialAudioEngine {
   }
 }
 
-export class ICloudSpatialAudioEngineImpl extends IBaseSpatialAudioEngineImpl implements ICloudSpatialAudioEngine {
-  initialize (config: CloudSpatialAudioConfig): number {
-    const apiType = 'CloudSpatialAudioEngine_initialize'
-    const jsonParams = {
-      config,
-      toJSON: () => {
-        return { config }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  addEventHandler (eventHandler: ICloudSpatialAudioEventHandler): number {
-    const apiType = 'CloudSpatialAudioEngine_addEventHandler'
-    const jsonParams = {
-      eventHandler,
-      toJSON: () => {
-        return {
-        }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  removeEventHandler (eventHandler: ICloudSpatialAudioEventHandler): number {
-    const apiType = 'CloudSpatialAudioEngine_removeEventHandler'
-    const jsonParams = {
-      eventHandler,
-      toJSON: () => {
-        return {
-        }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  enableSpatializer (enable: boolean, applyToTeam: boolean): number {
-    const apiType = 'CloudSpatialAudioEngine_enableSpatializer'
-    const jsonParams = {
-      enable,
-      applyToTeam,
-      toJSON: () => {
-        return {
-          enable,
-          applyToTeam
-        }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  setTeamId (teamId: number): number {
-    const apiType = 'CloudSpatialAudioEngine_setTeamId'
-    const jsonParams = {
-      teamId,
-      toJSON: () => {
-        return { teamId }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  setAudioRangeMode (rangeMode: AudioRangeModeType): number {
-    const apiType = 'CloudSpatialAudioEngine_setAudioRangeMode'
-    const jsonParams = {
-      rangeMode,
-      toJSON: () => {
-        return { rangeMode }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  enterRoom (token: string, roomName: string, uid: number): number {
-    const apiType = 'CloudSpatialAudioEngine_enterRoom'
-    const jsonParams = {
-      token,
-      roomName,
-      uid,
-      toJSON: () => {
-        return {
-          token,
-          roomName,
-          uid
-        }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  renewToken (token: string): number {
-    const apiType = 'CloudSpatialAudioEngine_renewToken'
-    const jsonParams = {
-      token,
-      toJSON: () => {
-        return { token }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  exitRoom (): number {
-    const apiType = 'CloudSpatialAudioEngine_exitRoom'
-    const jsonParams = {
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  getTeammates (): number[] {
-    const apiType = 'CloudSpatialAudioEngine_getTeammates'
-    const jsonParams = {
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-}
-
 export class ILocalSpatialAudioEngineImpl extends IBaseSpatialAudioEngineImpl implements ILocalSpatialAudioEngine {
-  initialize (config: LocalSpatialAudioConfig): number {
+  initialize (): number {
     const apiType = 'LocalSpatialAudioEngine_initialize'
     const jsonParams = {
-      config,
-      toJSON: () => {
-        return { config }
-      }
     }
     const jsonResults = callIrisApi.call(this, apiType, jsonParams)
     return jsonResults.result

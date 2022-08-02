@@ -217,21 +217,16 @@ export default class ContentInspect
   }
 
   onPressContentInspect = (enable) => {
-    const res = this.getRtcEngine().SetContentInspect({
-      enable,
-      DeviceWork: true,
-      CloudWork: false,
-      DeviceworkType: ContentInspectDeviceType.ContentInspectDeviceAgora,
-      extraInfo: '',
+    const res = this.getRtcEngine().enableContentInspect(enable, {
       modules: [
         {
           type: ContentInspectType.ContentInspectModeration,
-          frequency: 2,
+          interval: 2,
         },
       ],
       moduleCount: 1,
     })
-    console.log('enableSpatialAudio', enable, '\nres:', res)
+    console.log('enableContentInspect', enable, '\nres:', res)
   }
 
   renderRightBar = () => {

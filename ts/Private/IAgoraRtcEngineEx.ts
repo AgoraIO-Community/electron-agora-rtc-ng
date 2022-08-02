@@ -1,5 +1,5 @@
 import { IRtcEngine, ChannelMediaOptions } from './IAgoraRtcEngine'
-import { VideoEncoderConfiguration, VideoCanvas, VideoStreamType, SpatialAudioParams, VideoMirrorModeType, ConnectionStateType, EncryptionConfig, WatermarkOptions, UserInfo, VideoSourceType, SimulcastStreamConfig, DataStreamConfig } from './AgoraBase'
+import { VideoEncoderConfiguration, VideoCanvas, VideoStreamType, VideoSubscriptionOptions, SpatialAudioParams, VideoMirrorModeType, ConnectionStateType, EncryptionConfig, WatermarkOptions, UserInfo, VideoSourceType, SimulcastStreamConfig, SimulcastStreamMode, DataStreamConfig } from './AgoraBase'
 import { RenderModeType } from './AgoraMediaBase'
 
 /*
@@ -146,6 +146,31 @@ abstract muteRemoteVideoStreamEx(uid: number, mute: boolean, connection: RtcConn
  * @ignore
  */
 abstract setRemoteVideoStreamTypeEx(uid: number, streamType: VideoStreamType, connection: RtcConnection): number;
+
+/*
+ * @ignore
+ */
+abstract setSubscribeAudioBlacklistEx(uidList: number[], uidNumber: number, connection: RtcConnection): number;
+
+/*
+ * @ignore
+ */
+abstract setSubscribeAudioWhitelistEx(uidList: number[], uidNumber: number, connection: RtcConnection): number;
+
+/*
+ * @ignore
+ */
+abstract setSubscribeVideoBlacklistEx(uidList: number[], uidNumber: number, connection: RtcConnection): number;
+
+/*
+ * @ignore
+ */
+abstract setSubscribeVideoWhitelistEx(uidList: number[], uidNumber: number, connection: RtcConnection): number;
+
+/*
+ * @ignore
+ */
+abstract setRemoteVideoSubscriptionOptionsEx(uid: number, options: VideoSubscriptionOptions, connection: RtcConnection): number;
 
 /*
  * Sets the 2D position (the position on the horizontal plane) of the remote user's voice.
@@ -306,27 +331,19 @@ abstract setVideoProfileEx(width: number, height: number, frameRate: number, bit
 abstract enableDualStreamModeEx(sourceType: VideoSourceType, enabled: boolean, streamConfig: SimulcastStreamConfig, connection: RtcConnection): number;
 
 /*
- * Publishes the local stream to a specified CDN live streaming URL.
- * After calling this method, you can push media streams in RTMP or RTMPS protocol to the CDN according to RtcConnection . The SDK triggers the onRtmpStreamingStateChanged callback on the local client to report the state of adding a local stream to the CDN. Call this method after joining a channel.
- * Ensure that the Media Push function is enabled.
- * This method takes effect only when you are a host in live interactive streaming.
- * This method adds only one streaming URL to the CDN each time it is called. To push multiple URLs, call this method multiple times.
- *
- * @param connection The connection information. See RtcConnection .
- *
- * @param transcodingEnabled Whether to enable transcoding. Transcoding in a CDN live streaming converts the audio and video streams before pushing them to the CDN server. It applies to scenarios where a channel has multiple broadcasters and composite layout is needed.
- *  true: Enable transcoding.
- *  false: Disable transcoding. If you set this parameter as true, ensurethat you call the setLiveTranscoding method before calling this method. 
- *
- * @param url The Media Push URL in the RTMP or RTMPS format. The maximum length of this parameter is 1024 bytes. The URL address must not contain special characters, such as Chinese language characters.
- *
- * @returns
- * 0: Success.
- * < 0: Failure.
- * -2: Invalid parameter, usually an empty URL or a string with a length of 0.
- * -7: The engine is not initialized when streaming.
+ * @ignore
  */
-abstract addPublishStreamUrlEx(url: string, transcodingEnabled: boolean, connection: RtcConnection): number;
+abstract setDualStreamModeEx(sourceType: VideoSourceType, mode: SimulcastStreamMode, streamConfig: SimulcastStreamConfig, connection: RtcConnection): number;
+
+/*
+ * @ignore
+ */
+abstract enableWirelessAccelerate(enabled: boolean): number;
+
+/*
+ * @ignore
+ */
+abstract takeSnapshotEx(connection: RtcConnection, uid: number, filePath: string): number;
 
 /*
  * Creates a data stream.

@@ -20,7 +20,7 @@ export abstract class IMediaPlayerSourceObserver {
    *
    * @param position The playback position (ms) of media files.
    */
-  onPositionChanged?(position: number): void;
+  onPositionChanged?(positionMs: number): void;
 
   /*
    * Reports the playback event.

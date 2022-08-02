@@ -1,77 +1,4 @@
-import { IRtcEngine } from './IAgoraRtcEngine'
 import { RtcConnection } from './IAgoraRtcEngineEx'
-
-/*
- * @ignore
- */
-export enum SaeConnectionStateType {
-/*
- * @ignore
- */
-SaeConnectionStateConnecting = 0,
-/*
- * @ignore
- */
-SaeConnectionStateConnected = 1,
-/*
- * @ignore
- */
-SaeConnectionStateDisconnected = 2,
-/*
- * @ignore
- */
-SaeConnectionStateReconnecting = 3,
-/*
- * @ignore
- */
-SaeConnectionStateReconnected = 4,
-}
-
-/*
- * @ignore
- */
-export enum SaeConnectionChangedReasonType {
-/*
- * @ignore
- */
-SaeConnectionChangedDefault = 0,
-/*
- * @ignore
- */
-SaeConnectionChangedConnecting = 1,
-/*
- * @ignore
- */
-SaeConnectionChangedCreateRoomFail = 2,
-/*
- * @ignore
- */
-SaeConnectionChangedRtmDisconnect = 3,
-/*
- * @ignore
- */
-SaeConnectionChangedRtmAborted = 4,
-/*
- * @ignore
- */
-SaeConnectionChangedLostSync = 5,
-}
-
-/*
- * The audio range mode.
- */
-export enum AudioRangeModeType {
-/*
- * 0: Everyone mode. In this mode, whether a user can hear other users in the room depends on their settings for audio reception range, audio range mode, and team ID.
- * If both users A and B set the AudioRangeModeWorld mode, users A and B can hear each other when they are in the audio reception range of each other or belong to the same team.
- * If users A and B set the AudioRangeModeWorld and AudioRangeModeTeam mode respectively, they can only hear each other when they belong to the same team. 
- */
-AudioRangeModeWorld = 0,
-/*
- * 1: Team mode. In this mode, the user can only hear other users of the same team in the room.
- */
-AudioRangeModeTeam = 1,
-}
 
 /*
  * @ignore
@@ -85,85 +12,6 @@ export class RemoteVoicePositionInfo {
    * @ignore
    */
   forward?: number[]
-}
-
-/*
- * @ignore
- */
-export enum SaeDeployRegion {
-/*
- * @ignore
- */
-SaeDeployRegionCn = 0x00000001,
-/*
- * @ignore
- */
-SaeDeployRegionNa = 0x00000002,
-/*
- * @ignore
- */
-SaeDeployRegionEu = 0x00000004,
-/*
- * @ignore
- */
-SaeDeployRegionAs = 0x00000008,
-}
-
-/*
- * @ignore
- */
-export abstract class ICloudSpatialAudioEventHandler {
-/*
- * @ignore
- */
-  onTokenWillExpire?(): void;
-
-  /*
-   * @ignore
-   */
-  onConnectionStateChange?(state: SaeConnectionStateType, reason: SaeConnectionChangedReasonType): void;
-
-  /*
-   * @ignore
-   */
-  onTeammateLeft?(uid: number): void;
-
-  /*
-   * @ignore
-   */
-  onTeammateJoined?(uid: number): void;
-}
-
-/*
- * @ignore
- */
-export class CloudSpatialAudioConfig {
-/*
- * @ignore
- */
-  rtcEngine?: IRtcEngine
-  /*
-   * @ignore
-   */
-  eventHandler?: ICloudSpatialAudioEventHandler
-  /*
-   * @ignore
-   */
-  appId?: string
-  /*
-   * @ignore
-   */
-  deployRegion?: number
-}
-
-/*
- * @ignore
- */
-export class LocalSpatialAudioConfig {
-/*
- * @ignore
- */
-  rtcEngine?: IRtcEngine
 }
 
 /*
@@ -224,66 +72,11 @@ abstract muteAllRemoteAudioStreams(mute: boolean): number;
 /*
  * @ignore
  */
-export abstract class ICloudSpatialAudioEngine extends IBaseSpatialAudioEngine {
-/*
- * @ignore
- */
-abstract initialize(config: CloudSpatialAudioConfig): number;
-
-/*
- * @ignore
- */
-abstract addEventHandler(eventHandler: ICloudSpatialAudioEventHandler): number;
-
-/*
- * @ignore
- */
-abstract removeEventHandler(eventHandler: ICloudSpatialAudioEventHandler): number;
-
-/*
- * @ignore
- */
-abstract enableSpatializer(enable: boolean, applyToTeam: boolean): number;
-
-/*
- * @ignore
- */
-abstract setTeamId(teamId: number): number;
-
-/*
- * @ignore
- */
-abstract setAudioRangeMode(rangeMode: AudioRangeModeType): number;
-
-/*
- * @ignore
- */
-abstract enterRoom(token: string, roomName: string, uid: number): number;
-
-/*
- * @ignore
- */
-abstract renewToken(token: string): number;
-
-/*
- * @ignore
- */
-abstract exitRoom(): number;
-
-/*
- * @ignore
- */
-abstract getTeammates(): number[];
-}
-
-/*
- * @ignore
- */
 export abstract class ILocalSpatialAudioEngine extends IBaseSpatialAudioEngine {
 /*
  * @ignore
  */
-abstract initialize(config: LocalSpatialAudioConfig): number;
+abstract initialize(): number;
 
 /*
  * @ignore

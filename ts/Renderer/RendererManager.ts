@@ -259,7 +259,7 @@ class RendererManager {
       if (!renders || renders?.length === 0) {
         return;
       }
-      let finalResult = this.msgBridge.GetVideoStreamData(
+      let finalResult = this.msgBridge.GetVideoFrame(
         rendererItem.shareVideoFrame
       );
 
@@ -281,7 +281,7 @@ class RendererManager {
             height
           );
           rendererItem.shareVideoFrame = newShareVideoFrame;
-          finalResult = this.msgBridge.GetVideoStreamData(newShareVideoFrame);
+          finalResult = this.msgBridge.GetVideoFrame(newShareVideoFrame);
           break;
         case 5:
           // IRIS_VIDEO_PROCESS_ERR::ERR_BUFFER_EMPTY
@@ -292,11 +292,11 @@ class RendererManager {
           return;
       }
       if (finalResult.ret !== 0) {
-        logWarn("GetVideoStreamData ret is", finalResult.ret, rendererItem);
+        logWarn("GetVideoFrame ret is", finalResult.ret, rendererItem);
         return;
       }
       if (!finalResult.isNewFrame) {
-        logDebug("GetVideoStreamData isNewFrame is false", rendererItem);
+        logDebug("GetVideoFrame isNewFrame is false", rendererItem);
         return;
       }
       const renderVideoFrame = rendererItem.shareVideoFrame;

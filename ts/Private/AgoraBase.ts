@@ -24,10 +24,6 @@ ChannelProfileCloudGaming = 3,
  * @ignore
  */
 ChannelProfileCommunication1v1 = 4,
-/*
- * @ignore
- */
-ChannelProfileLiveBroadcasting2 = 5,
 }
 
 /*
@@ -122,14 +118,6 @@ WarnAdmPlayoutMalfunction = 1020,
  * @ignore
  */
 WarnAdmRecordMalfunction = 1021,
-/*
- * @ignore
- */
-WarnAdmIosCategoryNotPlayandrecord = 1029,
-/*
- * @ignore
- */
-WarnAdmIosSamplerateChange = 1030,
 /*
  * @ignore
  */
@@ -235,10 +223,6 @@ ErrNetDown = 14,
 /*
  * @ignore
  */
-ErrNetNobufs = 15,
-/*
- * @ignore
- */
 ErrJoinChannelRejected = 17,
 /*
  * @ignore
@@ -327,30 +311,6 @@ ErrClientIsBannedByServer = 123,
 /*
  * @ignore
  */
-ErrWatermarkParam = 124,
-/*
- * @ignore
- */
-ErrWatermarkPath = 125,
-/*
- * @ignore
- */
-ErrWatermarkPng = 126,
-/*
- * @ignore
- */
-ErrWatermarkrInfo = 127,
-/*
- * @ignore
- */
-ErrWatermarkArgb = 128,
-/*
- * @ignore
- */
-ErrWatermarkRead = 129,
-/*
- * @ignore
- */
 ErrEncryptedStreamNotAllowedPublish = 130,
 /*
  * @ignore
@@ -360,6 +320,10 @@ ErrLicenseCredentialInvalid = 131,
  * @ignore
  */
 ErrInvalidUserAccount = 134,
+/*
+ * @ignore
+ */
+ErrModuleNotFound = 157,
 /*
  * @ignore
  */
@@ -419,143 +383,7 @@ ErrPcmsendBufferoverflow = 201,
 /*
  * @ignore
  */
-ErrLogoutOther = 400,
-/*
- * @ignore
- */
-ErrLogoutUser = 401,
-/*
- * @ignore
- */
-ErrLogoutNet = 402,
-/*
- * @ignore
- */
-ErrLogoutKicked = 403,
-/*
- * @ignore
- */
-ErrLogoutPacket = 404,
-/*
- * @ignore
- */
-ErrLogoutTokenExpired = 405,
-/*
- * @ignore
- */
-ErrLogoutOldversion = 406,
-/*
- * @ignore
- */
-ErrLogoutTokenWrong = 407,
-/*
- * @ignore
- */
-ErrLogoutAlreadyLogout = 408,
-/*
- * @ignore
- */
-ErrLoginOther = 420,
-/*
- * @ignore
- */
-ErrLoginNet = 421,
-/*
- * @ignore
- */
-ErrLoginFailed = 422,
-/*
- * @ignore
- */
-ErrLoginCanceled = 423,
-/*
- * @ignore
- */
-ErrLoginTokenExpired = 424,
-/*
- * @ignore
- */
-ErrLoginOldVersion = 425,
-/*
- * @ignore
- */
-ErrLoginTokenWrong = 426,
-/*
- * @ignore
- */
-ErrLoginTokenKicked = 427,
-/*
- * @ignore
- */
 ErrLoginAlreadyLogin = 428,
-/*
- * @ignore
- */
-ErrJoinChannelOther = 440,
-/*
- * @ignore
- */
-ErrSendMessageOther = 440,
-/*
- * @ignore
- */
-ErrSendMessageTimeout = 441,
-/*
- * @ignore
- */
-ErrQueryUsernumOther = 450,
-/*
- * @ignore
- */
-ErrQueryUsernumTimeout = 451,
-/*
- * @ignore
- */
-ErrQueryUsernumByuser = 452,
-/*
- * @ignore
- */
-ErrLeaveChannelOther = 460,
-/*
- * @ignore
- */
-ErrLeaveChannelKicked = 461,
-/*
- * @ignore
- */
-ErrLeaveChannelByuser = 462,
-/*
- * @ignore
- */
-ErrLeaveChannelLogout = 463,
-/*
- * @ignore
- */
-ErrLeaveChannelDisconnected = 464,
-/*
- * @ignore
- */
-ErrInviteOther = 470,
-/*
- * @ignore
- */
-ErrInviteReinvite = 471,
-/*
- * @ignore
- */
-ErrInviteNet = 472,
-/*
- * @ignore
- */
-ErrInvitePeerOffline = 473,
-/*
- * @ignore
- */
-ErrInviteTimeout = 474,
-/*
- * @ignore
- */
-ErrInviteCantRecv = 475,
 /*
  * @ignore
  */
@@ -563,27 +391,7 @@ ErrLoadMediaEngine = 1001,
 /*
  * @ignore
  */
-ErrStartCall = 1002,
-/*
- * @ignore
- */
-ErrStartCamera = 1003,
-/*
- * @ignore
- */
-ErrStartVideoRender = 1004,
-/*
- * @ignore
- */
 ErrAdmGeneralError = 1005,
-/*
- * @ignore
- */
-ErrAdmJavaResource = 1006,
-/*
- * @ignore
- */
-ErrAdmSampleRate = 1007,
 /*
  * @ignore
  */
@@ -611,207 +419,7 @@ ErrAdmStopRecording = 1013,
 /*
  * @ignore
  */
-ErrAdmRuntimePlayoutError = 1015,
-/*
- * @ignore
- */
-ErrAdmRuntimeRecordingError = 1017,
-/*
- * @ignore
- */
-ErrAdmRecordAudioFailed = 1018,
-/*
- * @ignore
- */
-ErrAdmInitLoopback = 1022,
-/*
- * @ignore
- */
-ErrAdmStartLoopback = 1023,
-/*
- * @ignore
- */
-ErrAdmNoPermission = 1027,
-/*
- * @ignore
- */
-ErrAdmRecordAudioIsActive = 1033,
-/*
- * @ignore
- */
-ErrAdmAndroidJniJavaResource = 1101,
-/*
- * @ignore
- */
-ErrAdmAndroidJniNoRecordFrequency = 1108,
-/*
- * @ignore
- */
-ErrAdmAndroidJniNoPlaybackFrequency = 1109,
-/*
- * @ignore
- */
-ErrAdmAndroidJniJavaStartRecord = 1111,
-/*
- * @ignore
- */
-ErrAdmAndroidJniJavaStartPlayback = 1112,
-/*
- * @ignore
- */
-ErrAdmAndroidJniJavaRecordError = 1115,
-/*
- * @ignore
- */
-ErrAdmAndroidOpenslCreateEngine = 1151,
-/*
- * @ignore
- */
-ErrAdmAndroidOpenslCreateAudioRecorder = 1153,
-/*
- * @ignore
- */
-ErrAdmAndroidOpenslStartRecorderThread = 1156,
-/*
- * @ignore
- */
-ErrAdmAndroidOpenslCreateAudioPlayer = 1157,
-/*
- * @ignore
- */
-ErrAdmAndroidOpenslStartPlayerThread = 1160,
-/*
- * @ignore
- */
-ErrAdmIosInputNotAvailable = 1201,
-/*
- * @ignore
- */
-ErrAdmIosActivateSessionFail = 1206,
-/*
- * @ignore
- */
-ErrAdmIosVpioInitFail = 1210,
-/*
- * @ignore
- */
-ErrAdmIosVpioReinitFail = 1213,
-/*
- * @ignore
- */
-ErrAdmIosVpioRestartFail = 1214,
-/*
- * @ignore
- */
-ErrAdmIosSetRenderCallbackFail = 1219,
-/*
- * @ignore
- */
-ErrAdmIosSessionSampleratrZero = 1221,
-/*
- * @ignore
- */
-ErrAdmWinCoreInit = 1301,
-/*
- * @ignore
- */
-ErrAdmWinCoreInitRecording = 1303,
-/*
- * @ignore
- */
-ErrAdmWinCoreInitPlayout = 1306,
-/*
- * @ignore
- */
-ErrAdmWinCoreInitPlayoutNull = 1307,
-/*
- * @ignore
- */
-ErrAdmWinCoreStartRecording = 1309,
-/*
- * @ignore
- */
-ErrAdmWinCoreCreateRecThread = 1311,
-/*
- * @ignore
- */
-ErrAdmWinCoreCaptureNotStartup = 1314,
-/*
- * @ignore
- */
-ErrAdmWinCoreCreateRenderThread = 1319,
-/*
- * @ignore
- */
-ErrAdmWinCoreRenderNotStartup = 1320,
-/*
- * @ignore
- */
-ErrAdmWinCoreNoRecordingDevice = 1322,
-/*
- * @ignore
- */
-ErrAdmWinCoreNoPlayoutDevice = 1323,
-/*
- * @ignore
- */
-ErrAdmWinWaveInit = 1351,
-/*
- * @ignore
- */
-ErrAdmWinWaveInitRecording = 1353,
-/*
- * @ignore
- */
-ErrAdmWinWaveInitMicrophone = 1354,
-/*
- * @ignore
- */
-ErrAdmWinWaveInitPlayout = 1355,
-/*
- * @ignore
- */
-ErrAdmWinWaveInitSpeaker = 1356,
-/*
- * @ignore
- */
-ErrAdmWinWaveStartRecording = 1357,
-/*
- * @ignore
- */
-ErrAdmWinWaveStartPlayout = 1358,
-/*
- * @ignore
- */
-ErrAdmNoRecordingDevice = 1359,
-/*
- * @ignore
- */
-ErrAdmNoPlayoutDevice = 1360,
-/*
- * @ignore
- */
 ErrVdmCameraNotAuthorized = 1501,
-/*
- * @ignore
- */
-ErrVdmWinDeviceInUse = 1502,
-/*
- * @ignore
- */
-ErrVcmUnknownError = 1600,
-/*
- * @ignore
- */
-ErrVcmEncoderInitError = 1601,
-/*
- * @ignore
- */
-ErrVcmEncoderEncodeError = 1602,
-/*
- * @ignore
- */
-ErrVcmEncoderSetError = 1603,
 }
 
 /*
@@ -906,6 +514,10 @@ AgoraIidCloudSpatialAudio = 10,
  * @ignore
  */
 AgoraIidLocalSpatialAudio = 11,
+/*
+ * @ignore
+ */
+AgoraIidMediaRecorder = 12,
 }
 
 /*
@@ -1115,7 +727,7 @@ MaintainResolution = 3,
 /*
  * @ignore
  */
-DISABLED = 100,
+Disabled = 100,
 }
 
 /*
@@ -1153,10 +765,6 @@ VideoCodecH264 = 2,
  */
 VideoCodecH265 = 3,
 /*
- * @ignore
- */
-VideoCodecVp9 = 5,
-/*
  * 6: Generic.
  * This type is used for transmitting raw video data, such as encrypted video frames. The SDK returns this type of video frames in callbacks, and you need to decode and render the frames yourself.
  */
@@ -1169,6 +777,10 @@ VideoCodecGenericH264 = 7,
  * @ignore
  */
 VideoCodecAv1 = 12,
+/*
+ * @ignore
+ */
+VideoCodecVp9 = 13,
 /*
  * 20: Generic JPEG.This type consumes minimum computing resources and applies to IoT devices.
  */
@@ -1351,6 +963,10 @@ export class EncodedAudioFrameInfo {
    * This function is not currently supported.
    */
   advancedSettings?: EncodedAudioFrameAdvancedSettings
+  /*
+   * @ignore
+   */
+  captureTimeMs?: number
 }
 
 /*
@@ -1408,6 +1024,20 @@ VideoStreamLow = 1,
 }
 
 /*
+ * @ignore
+ */
+export class VideoSubscriptionOptions {
+/*
+ * @ignore
+ */
+  type?: VideoStreamType
+  /*
+   * @ignore
+   */
+  encodedFrameOnly?: boolean
+}
+
+/*
  * The information about the external encoded video frame.
  */
 export class EncodedVideoFrameInfo {
@@ -1441,13 +1071,9 @@ export class EncodedVideoFrameInfo {
    */
   trackId?: number
   /*
-   * The Unix timestamp (ms) when the video frame is rendered. This timestamp can be used to guide the rendering of the video frame. It is required.
-   */
-  renderTimeMs?: number
-  /*
    * @ignore
    */
-  internalSendTs?: number
+  captureTimeMs?: number
   /*
    * The user ID to push the the external encoded video frame.
    */
@@ -1536,6 +1162,24 @@ export class DataStreamConfig {
    * Do not set this parameter as true if you need the receiver to receive the data packet immediately.
    */
   ordered?: boolean
+}
+
+/*
+ * @ignore
+ */
+export enum SimulcastStreamMode {
+/*
+ * @ignore
+ */
+AutoSimulcastStream = -1,
+/*
+ * @ignore
+ */
+DisableSimulcastStrem = 0,
+/*
+ * @ignore
+ */
+EnableSimulcastStream = 1,
 }
 
 /*
@@ -1873,10 +1517,6 @@ AudienceLatencyLevelLowLatency = 1,
  * 2: (Default) Ultra low latency.
  */
 AudienceLatencyLevelUltraLowLatency = 2,
-/*
- * @ignore
- */
-AudienceLatencyLevelHighLatency = 3,
 }
 
 /*
@@ -1901,6 +1541,32 @@ ExperienceQualityGood = 0,
  * 1: The QoE of the local user is poor
  */
 ExperienceQualityBad = 1,
+}
+
+/*
+ * @ignore
+ */
+export enum ExperiencePoorReason {
+/*
+ * @ignore
+ */
+ExperienceReasonNone = 0,
+/*
+ * @ignore
+ */
+RemoteNetworkQualityPoor = 1,
+/*
+ * @ignore
+ */
+LocalNetworkQualityPoor = 2,
+/*
+ * @ignore
+ */
+WirelessSignalPoor = 4,
+/*
+ * @ignore
+ */
+WifiBluetoothCoexist = 8,
 }
 
 /*
@@ -1972,6 +1638,10 @@ export class RemoteAudioStats {
    * The Quality of Experience (QoE) of the local user when receiving a remote audio stream. See ExperienceQualityType .
    */
   qoeQuality?: number
+  /*
+   * @ignore
+   */
+  qualityChangedReason?: number
 }
 
 /*
@@ -2033,17 +1703,17 @@ AudioScenarioGameStreaming = 3,
  */
 AudioScenarioChatroom = 5,
 /*
- * 6: High-quality audio scenario, where users mainly play music.
- */
-AudioScenarioHighDefinition = 6,
-/*
  * 7: Real-time chorus scenario, where users have good network conditions and require ultra-low latency.
  */
 AudioScenarioChorus = 7,
 /*
+ * @ignore
+ */
+AudioScenarioMeeting = 8,
+/*
  * The number of enumerations.
  */
-AudioScenarioNum = 8,
+AudioScenarioNum = 9,
 }
 
 /*
@@ -2080,6 +1750,50 @@ ContentHintMotion = 1,
  * Motionless content. Choose this option if you prefer sharpness or when you are sharing a picture, PowerPoint slides, or texts.
  */
 ContentHintDetails = 2,
+}
+
+/*
+ * @ignore
+ */
+export enum ScreenScenarioType {
+/*
+ * @ignore
+ */
+ScreenScenarioDocument = 1,
+/*
+ * @ignore
+ */
+ScreenScenarioGaming = 2,
+/*
+ * @ignore
+ */
+ScreenScenarioVideo = 3,
+/*
+ * @ignore
+ */
+ScreenScenarioRdc = 4,
+}
+
+/*
+ * @ignore
+ */
+export enum CaptureBrightnessLevelType {
+/*
+ * @ignore
+ */
+CaptureBrightnessLevelInvalid = -1,
+/*
+ * @ignore
+ */
+CaptureBrightnessLevelNormal = 0,
+/*
+ * @ignore
+ */
+CaptureBrightnessLevelBright = 1,
+/*
+ * @ignore
+ */
+CaptureBrightnessLevelDark = 2,
 }
 
 /*
@@ -2132,6 +1846,26 @@ LocalAudioStreamErrorRecordFailure = 4,
  * @ignore
  */
 LocalAudioStreamErrorEncodeFailure = 5,
+/*
+ * @ignore
+ */
+LocalAudioStreamErrorNoRecordingDevice = 6,
+/*
+ * @ignore
+ */
+LocalAudioStreamErrorNoPlayoutDevice = 7,
+/*
+ * @ignore
+ */
+LocalAudioStreamErrorInterrupted = 8,
+/*
+ * @ignore
+ */
+LocalAudioStreamErrorRecordInvalidId = 9,
+/*
+ * @ignore
+ */
+LocalAudioStreamErrorPlayoutInvalidId = 10,
 }
 
 /*
@@ -2368,6 +2102,10 @@ RemoteVideoStateReasonVideoStreamTypeChangeToLow = 10,
  * @ignore
  */
 RemoteVideoStateReasonVideoStreamTypeChangeToHigh = 11,
+/*
+ * @ignore
+ */
+RemoteVideoStateReasonSdkInBackground = 12,
 }
 
 /*
@@ -2603,6 +2341,10 @@ export class LocalAudioStats {
    * The packet loss rate (%) from the local client to the Agora server before applying the anti-packet loss strategies.
    */
   txPacketLossRate?: number
+  /*
+   * @ignore
+   */
+  audioDeviceDelay?: number
 }
 
 /*
@@ -2704,6 +2446,10 @@ RtmpStreamPublishErrorNetDown = 14,
  * 15: Your App ID does not have permission to use the CDN live streaming function. 
  */
 RtmpStreamPublishErrorInvalidAppid = 15,
+/*
+ * @ignore
+ */
+RtmpStreamPublishErrorInvalidPrivilege = 16,
 /*
  * 100: The streaming has been stopped normally. After you call removePublishStreamUrl to stop streaming, the SDK returns this value.
  */
@@ -3253,6 +2999,60 @@ ClientRoleChangeFailedConnectionFailed = 4,
 }
 
 /*
+ * @ignore
+ */
+export enum WlaccMessageReason {
+/*
+ * @ignore
+ */
+WlaccMessageReasonWeakSignal = 0,
+/*
+ * @ignore
+ */
+WlaccMessageReasonChannelCongestion = 1,
+}
+
+/*
+ * @ignore
+ */
+export enum WlaccSuggestAction {
+/*
+ * @ignore
+ */
+WlaccSuggestActionCloseToWifi = 0,
+/*
+ * @ignore
+ */
+WlaccSuggestActionConnectSsid = 1,
+/*
+ * @ignore
+ */
+WlaccSuggestActionCheck5g = 2,
+/*
+ * @ignore
+ */
+WlaccSuggestActionModifySsid = 3,
+}
+
+/*
+ * @ignore
+ */
+export class WlAccStats {
+/*
+ * @ignore
+ */
+  e2eDelayPercent?: number
+  /*
+   * @ignore
+   */
+  frozenRatioPercent?: number
+  /*
+   * @ignore
+   */
+  lossRatePercent?: number
+}
+
+/*
  * Network types.
  */
 export enum NetworkType {
@@ -3396,6 +3196,108 @@ export class BeautyOptions {
 }
 
 /*
+ * @ignore
+ */
+export enum LowLightEnhanceMode {
+/*
+ * @ignore
+ */
+LowLightEnhanceAuto = 0,
+/*
+ * @ignore
+ */
+LowLightEnhanceManual = 1,
+}
+
+/*
+ * @ignore
+ */
+export enum LowLightEnhanceLevel {
+/*
+ * @ignore
+ */
+LowLightEnhanceLevelHighQuality = 0,
+/*
+ * @ignore
+ */
+LowLightEnhanceLevelFast = 1,
+}
+
+/*
+ * @ignore
+ */
+export class LowlightEnhanceOptions {
+/*
+ * @ignore
+ */
+  mode?: LowLightEnhanceMode
+  /*
+   * @ignore
+   */
+  level?: LowLightEnhanceLevel
+}
+
+/*
+ * @ignore
+ */
+export enum VideoDenoiserMode {
+/*
+ * @ignore
+ */
+VideoDenoiserAuto = 0,
+/*
+ * @ignore
+ */
+VideoDenoiserManual = 1,
+}
+
+/*
+ * @ignore
+ */
+export enum VideoDenoiserLevel {
+/*
+ * @ignore
+ */
+VideoDenoiserLevelHighQuality = 0,
+/*
+ * @ignore
+ */
+VideoDenoiserLevelFast = 1,
+/*
+ * @ignore
+ */
+VideoDenoiserLevelStrength = 2,
+}
+
+/*
+ * @ignore
+ */
+export class VideoDenoiserOptions {
+/*
+ * @ignore
+ */
+  mode?: VideoDenoiserMode
+  /*
+   * @ignore
+   */
+  level?: VideoDenoiserLevel
+}
+
+/*
+ * @ignore
+ */
+export class ColorEnhanceOptions {
+/*
+ * @ignore
+ */
+  strengthLevel?: number
+  /*
+   * @ignore
+   */
+  skinProtectLevel?: number
+}
+
+/*
  * The type of the custom background image.
  */
 export enum BackgroundSourceType {
@@ -3456,35 +3358,29 @@ export class VirtualBackgroundSource {
 /*
  * @ignore
  */
-export class FishCorrectionParams {
+export enum SegModelType {
 /*
  * @ignore
  */
-  _x_center?: number
+SegModelAi = 1,
+/*
+ * @ignore
+ */
+SegModelGreen = 2,
+}
+
+/*
+ * @ignore
+ */
+export class SegmentationProperty {
+/*
+ * @ignore
+ */
+  modelType?: SegModelType
   /*
    * @ignore
    */
-  _y_center?: number
-  /*
-   * @ignore
-   */
-  _scale_factor?: number
-  /*
-   * @ignore
-   */
-  _focal_length?: number
-  /*
-   * @ignore
-   */
-  _pol_focal_length?: number
-  /*
-   * @ignore
-   */
-  _split_height?: number
-  /*
-   * @ignore
-   */
-  _ss?: number[]
+  greenCapacity?: number
 }
 
 /*
@@ -3612,6 +3508,10 @@ RoomAcousticsEthereal = 0x02010700,
  */
 RoomAcoustics3dVoice = 0x02010800,
 /*
+ * @ignore
+ */
+RoomAcousticsVirtualSurroundSound = 0x02010900,
+/*
  * A middle-aged man's voice.
  * Agora recommends using this preset to process a male-sounding voice; otherwise, you may not hear the anticipated voice effect. 
  */
@@ -3725,6 +3625,18 @@ export class ScreenCaptureParameters {
    * The number of windows to be blocked.
    */
   excludeWindowCount?: number
+  /*
+   * @ignore
+   */
+  highLightWidth?: number
+  /*
+   * @ignore
+   */
+  highLightColor?: number
+  /*
+   * @ignore
+   */
+  enableHighLight?: boolean
 }
 
 /*
@@ -3743,22 +3655,26 @@ AudioRecordingQualityMedium = 1,
  * @ignore
  */
 AudioRecordingQualityHigh = 2,
+/*
+ * @ignore
+ */
+AudioRecordingQualityUltraHigh = 3,
 }
 
 /*
- * Recording quality.
+ * Recording content. Set in startAudioRecording .
  */
 export enum AudioFileRecordingType {
 /*
- * @ignore
+ * 1: Only records the audio of the local user.
  */
 AudioFileRecordingMic = 1,
 /*
- * @ignore
+ * 2: Only records the audio of all remote users.
  */
 AudioFileRecordingPlayback = 2,
 /*
- * @ignore
+ * 3: Records the mixed audio of the local and all remote users.
  */
 AudioFileRecordingMixed = 3,
 }
@@ -3811,6 +3727,10 @@ export class AudioRecordingConfiguration {
    * Recording quality. See AudioRecordingQualityType . This parameter applies to AAC files only.
    */
   quality?: AudioRecordingQualityType
+  /*
+   * @ignore
+   */
+  recordingChannel?: number
 }
 
 /*
@@ -3825,6 +3745,26 @@ export class AudioEncodedFrameObserverConfig {
    * @ignore
    */
   encodingType?: AudioEncodingType
+}
+
+/*
+ * @ignore
+ */
+export abstract class IAudioEncodedFrameObserver {
+/*
+ * @ignore
+ */
+  OnRecordAudioEncodedFrame?(frameBuffer: Uint8Array, length: number, audioEncodedFrameInfo: EncodedAudioFrameInfo): void;
+
+  /*
+   * @ignore
+   */
+  OnPlaybackAudioEncodedFrame?(frameBuffer: Uint8Array, length: number, audioEncodedFrameInfo: EncodedAudioFrameInfo): void;
+
+  /*
+   * @ignore
+   */
+  OnMixedAudioEncodedFrame?(frameBuffer: Uint8Array, length: number, audioEncodedFrameInfo: EncodedAudioFrameInfo): void;
 }
 
 /*
@@ -3881,6 +3821,14 @@ AreaCodeAf = 0x00000100,
  * @ignore
  */
 AreaCodeKr = 0x00000200,
+/*
+ * @ignore
+ */
+AreaCodeHkmc = 0x00000400,
+/*
+ * @ignore
+ */
+AreaCodeUs = 0x00000800,
 /*
  * @ignore
  */
@@ -4250,7 +4198,11 @@ RecordAudio = 0,
 /*
  * 1: Permission for the camera.
  */
-CAMERA = 1,
+Camera = 1,
+/*
+ * @ignore
+ */
+ScreenCapture = 2,
 }
 
 /*
@@ -4319,6 +4271,32 @@ PubStatePublished = 3,
 }
 
 /*
+ * @ignore
+ */
+export class EchoTestConfiguration {
+/*
+ * @ignore
+ */
+  view?: any
+  /*
+   * @ignore
+   */
+  enableAudio?: boolean
+  /*
+   * @ignore
+   */
+  enableVideo?: boolean
+  /*
+   * @ignore
+   */
+  token?: string
+  /*
+   * @ignore
+   */
+  channelId?: string
+}
+
+/*
  * The information of the user.
  */
 export class UserInfo {
@@ -4358,27 +4336,89 @@ export enum ThreadPriorityType {
 /*
  * @ignore
  */
-LOWEST = 0,
+Lowest = 0,
 /*
  * @ignore
  */
-LOW = 1,
+Low = 1,
 /*
  * @ignore
  */
-NORMAL = 2,
+Normal = 2,
 /*
  * @ignore
  */
-HIGH = 3,
+High = 3,
 /*
  * @ignore
  */
-HIGHEST = 4,
+Highest = 4,
 /*
  * @ignore
  */
-CRITICAL = 5,
+Critical = 5,
+}
+
+/*
+ * @ignore
+ */
+export class ScreenVideoParameters {
+/*
+ * @ignore
+ */
+  dimensions?: VideoDimensions
+  /*
+   * @ignore
+   */
+  frameRate?: number
+  /*
+   * @ignore
+   */
+  bitrate?: number
+  /*
+   * @ignore
+   */
+  contentHint?: VideoContentHint
+}
+
+/*
+ * @ignore
+ */
+export class ScreenAudioParameters {
+/*
+ * @ignore
+ */
+  sampleRate?: number
+  /*
+   * @ignore
+   */
+  channels?: number
+  /*
+   * @ignore
+   */
+  captureSignalVolume?: number
+}
+
+/*
+ * @ignore
+ */
+export class ScreenCaptureParameters2 {
+/*
+ * @ignore
+ */
+  captureAudio?: boolean
+  /*
+   * @ignore
+   */
+  audioParams?: ScreenAudioParameters
+  /*
+   * @ignore
+   */
+  captureVideo?: boolean
+  /*
+   * @ignore
+   */
+  videoParams?: ScreenVideoParameters
 }
 
 /*
@@ -4409,4 +4449,8 @@ export class SpatialAudioParams {
    * @ignore
    */
   enable_air_absorb?: boolean
+  /*
+   * @ignore
+   */
+  speaker_attenuation?: number
 }

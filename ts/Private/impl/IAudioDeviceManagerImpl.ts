@@ -221,6 +221,30 @@ export class IAudioDeviceManagerImpl implements IAudioDeviceManager {
     return jsonResults.result
   }
 
+  followSystemPlaybackDevice (enable: boolean): number {
+    const apiType = 'AudioDeviceManager_followSystemPlaybackDevice'
+    const jsonParams = {
+      enable,
+      toJSON: () => {
+        return { enable }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  followSystemRecordingDevice (enable: boolean): number {
+    const apiType = 'AudioDeviceManager_followSystemRecordingDevice'
+    const jsonParams = {
+      enable,
+      toJSON: () => {
+        return { enable }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
   release (): void {
     const apiType = 'AudioDeviceManager_release'
     const jsonParams = {

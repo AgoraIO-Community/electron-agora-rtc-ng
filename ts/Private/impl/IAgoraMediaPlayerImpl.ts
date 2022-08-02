@@ -1,7 +1,7 @@
 import { callIrisApi } from '../internal/IrisApiEngine'
-import { IMediaPlayer } from '../IAgoraMediaPlayer'
-import { PlayerStreamInfo, MediaPlayerState } from '../AgoraMediaPlayerTypes'
-import { RenderModeType, AudioDualMonoMode } from '../AgoraMediaBase'
+import { IMediaPlayer, IMediaPlayerAudioFrameObserver, IMediaPlayerVideoFrameObserver, IMediaPlayerCacheManager } from '../IAgoraMediaPlayer'
+import { MediaSource, PlayerStreamInfo, MediaPlayerState } from '../AgoraMediaPlayerTypes'
+import { RenderModeType, IAudioSpectrumObserver, AudioDualMonoMode } from '../AgoraMediaBase'
 import { IMediaPlayerSourceObserver } from '../IAgoraMediaPlayerSource'
 import { SpatialAudioParams } from '../AgoraBase'
 export class IMediaPlayerImpl implements IMediaPlayer {
@@ -23,6 +23,18 @@ export class IMediaPlayerImpl implements IMediaPlayer {
           url,
           startPos
         }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  openWithMediaSource (source: MediaSource): number {
+    const apiType = 'MediaPlayer_openWithMediaSource'
+    const jsonParams = {
+      source,
+      toJSON: () => {
+        return { source }
       }
     }
     const jsonResults = callIrisApi.call(this, apiType, jsonParams)
@@ -137,46 +149,6 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return jsonResults.result
   }
 
-  muteAudio (audioMute: boolean): number {
-    const apiType = 'MediaPlayer_muteAudio'
-    const jsonParams = {
-      audio_mute: audioMute,
-      toJSON: () => {
-        return { audio_mute: audioMute }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  isAudioMuted (): boolean {
-    const apiType = 'MediaPlayer_isAudioMuted'
-    const jsonParams = {
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  muteVideo (videoMute: boolean): number {
-    const apiType = 'MediaPlayer_muteVideo'
-    const jsonParams = {
-      video_mute: videoMute,
-      toJSON: () => {
-        return { video_mute: videoMute }
-      }
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
-  isVideoMuted (): boolean {
-    const apiType = 'MediaPlayer_isVideoMuted'
-    const jsonParams = {
-    }
-    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    return jsonResults.result
-  }
-
   setPlaybackSpeed (speed: number): number {
     const apiType = 'MediaPlayer_setPlaybackSpeed'
     const jsonParams = {
@@ -245,12 +217,12 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return jsonResults.result
   }
 
-  mute (mute: boolean): number {
+  mute (muted: boolean): number {
     const apiType = 'MediaPlayer_mute'
     const jsonParams = {
-      mute,
+      muted,
       toJSON: () => {
-        return { mute }
+        return { muted }
       }
     }
     const jsonResults = callIrisApi.call(this, apiType, jsonParams)
@@ -262,8 +234,8 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     const jsonParams = {
     }
     const jsonResults = callIrisApi.call(this, apiType, jsonParams)
-    const mute = jsonResults.mute
-    return mute
+    const muted = jsonResults.muted
+    return muted
   }
 
   adjustPlayoutVolume (volume: number): number {
@@ -347,6 +319,32 @@ export class IMediaPlayerImpl implements IMediaPlayer {
 
   unregisterPlayerSourceObserver (observer: IMediaPlayerSourceObserver): number {
     const apiType = 'MediaPlayer_unregisterPlayerSourceObserver'
+    const jsonParams = {
+      observer,
+      toJSON: () => {
+        return {
+        }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  registerMediaPlayerAudioSpectrumObserver (observer: IAudioSpectrumObserver, intervalInMS: number): number {
+    const apiType = 'MediaPlayer_registerMediaPlayerAudioSpectrumObserver'
+    const jsonParams = {
+      observer,
+      intervalInMS,
+      toJSON: () => {
+        return { intervalInMS }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  unregisterMediaPlayerAudioSpectrumObserver (observer: IAudioSpectrumObserver): number {
+    const apiType = 'MediaPlayer_unregisterMediaPlayerAudioSpectrumObserver'
     const jsonParams = {
       observer,
       toJSON: () => {
@@ -542,6 +540,74 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     return jsonResults.result
   }
 
+  setSoundPositionParams (pan: number, gain: number): number {
+    const apiType = 'MediaPlayer_setSoundPositionParams'
+    const jsonParams = {
+      pan,
+      gain,
+      toJSON: () => {
+        return {
+          pan,
+          gain
+        }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  registerAudioFrameObserver (observer: IMediaPlayerAudioFrameObserver): number {
+    const apiType = 'MediaPlayer_registerAudioFrameObserver'
+    const jsonParams = {
+      observer,
+      toJSON: () => {
+        return {
+        }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  unregisterAudioFrameObserver (observer: IMediaPlayerAudioFrameObserver): number {
+    const apiType = 'MediaPlayer_unregisterAudioFrameObserver'
+    const jsonParams = {
+      observer,
+      toJSON: () => {
+        return {
+        }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  registerVideoFrameObserver (observer: IMediaPlayerVideoFrameObserver): number {
+    const apiType = 'MediaPlayer_registerVideoFrameObserver'
+    const jsonParams = {
+      observer,
+      toJSON: () => {
+        return {
+        }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  unregisterVideoFrameObserver (observer: IMediaPlayerVideoFrameObserver): number {
+    const apiType = 'MediaPlayer_unregisterVideoFrameObserver'
+    const jsonParams = {
+      observer,
+      toJSON: () => {
+        return {
+        }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
   setPlayerOptionInInt (key: string, value: number): number {
     const apiType = 'MediaPlayer_setPlayerOptionInInt'
     const jsonParams = {
@@ -572,5 +638,140 @@ export class IMediaPlayerImpl implements IMediaPlayer {
     }
     const jsonResults = callIrisApi.call(this, apiType, jsonParams)
     return jsonResults.result
+  }
+}
+
+export class IMediaPlayerCacheManagerImpl implements IMediaPlayerCacheManager {
+  removeAllCaches (): number {
+    const apiType = 'MediaPlayerCacheManager_removeAllCaches'
+    const jsonParams = {
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  removeOldCache (): number {
+    const apiType = 'MediaPlayerCacheManager_removeOldCache'
+    const jsonParams = {
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  removeCacheByUri (uri: string): number {
+    const apiType = 'MediaPlayerCacheManager_removeCacheByUri'
+    const jsonParams = {
+      uri,
+      toJSON: () => {
+        return { uri }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  setCacheDir (path: string): number {
+    const apiType = 'MediaPlayerCacheManager_setCacheDir'
+    const jsonParams = {
+      path,
+      toJSON: () => {
+        return { path }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  setMaxCacheFileCount (count: number): number {
+    const apiType = 'MediaPlayerCacheManager_setMaxCacheFileCount'
+    const jsonParams = {
+      count,
+      toJSON: () => {
+        return { count }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  setMaxCacheFileSize (cacheSize: number): number {
+    const apiType = 'MediaPlayerCacheManager_setMaxCacheFileSize'
+    const jsonParams = {
+      cacheSize,
+      toJSON: () => {
+        return { cacheSize }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  enableAutoRemoveCache (enable: boolean): number {
+    const apiType = 'MediaPlayerCacheManager_enableAutoRemoveCache'
+    const jsonParams = {
+      enable,
+      toJSON: () => {
+        return { enable }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  getCacheDir (length: number): string {
+    const apiType = 'MediaPlayerCacheManager_getCacheDir'
+    const jsonParams = {
+      length,
+      toJSON: () => {
+        return { length }
+      }
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    const path = jsonResults.path
+    return path
+  }
+
+  getMaxCacheFileCount (): number {
+    const apiType = 'MediaPlayerCacheManager_getMaxCacheFileCount'
+    const jsonParams = {
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  getMaxCacheFileSize (): number {
+    const apiType = 'MediaPlayerCacheManager_getMaxCacheFileSize'
+    const jsonParams = {
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+
+  getCacheFileCount (): number {
+    const apiType = 'MediaPlayerCacheManager_getCacheFileCount'
+    const jsonParams = {
+    }
+    const jsonResults = callIrisApi.call(this, apiType, jsonParams)
+    return jsonResults.result
+  }
+}
+
+export function processIMediaPlayerAudioFrameObserver (handler: IMediaPlayerAudioFrameObserver, event: string, jsonParams: any) {
+  switch (event) {
+    case 'onFrame':
+      if (handler.onFrame !== undefined) {
+        handler.onFrame(jsonParams.frame)
+      }
+      break
+  }
+}
+
+export function processIMediaPlayerVideoFrameObserver (handler: IMediaPlayerVideoFrameObserver, event: string, jsonParams: any) {
+  switch (event) {
+    case 'onFrame':
+      if (handler.onFrame !== undefined) {
+        handler.onFrame(jsonParams.frame)
+      }
+      break
   }
 }

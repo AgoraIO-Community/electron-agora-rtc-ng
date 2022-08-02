@@ -202,6 +202,16 @@ abstract startAudioDeviceLoopbackTest(indicationInterval: number): number;
 abstract stopAudioDeviceLoopbackTest(): number;
 
 /*
+ * @ignore
+ */
+abstract followSystemPlaybackDevice(enable: boolean): number;
+
+/*
+ * @ignore
+ */
+abstract followSystemRecordingDevice(enable: boolean): number;
+
+/*
  * Releases all the resources occupied by the IAudioDeviceManager object.
  */
 abstract release(): void;

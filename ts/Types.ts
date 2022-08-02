@@ -1,5 +1,6 @@
-import { VideoSourceType } from "./Private/AgoraBase";
-import { RenderModeType } from "./Private/AgoraMediaBase";
+import { IMediaPlayerAudioFrameObserver, IMediaPlayerVideoFrameObserver } from "./AgoraSdk";
+import { IAudioEncodedFrameObserver, VideoSourceType } from "./Private/AgoraBase";
+import { IAudioFrameObserver, IAudioSpectrumObserver, IVideoEncodedFrameObserver, IVideoFrameObserver, RenderModeType } from "./Private/AgoraMediaBase";
 import { IMediaPlayerSourceObserver } from "./Private/IAgoraMediaPlayerSource";
 import {
   IDirectCdnStreamingEventHandler,
@@ -16,17 +17,32 @@ export interface AgoraEnvType {
   enableLogging: boolean;
   enableDebugLogging: boolean;
   isInitializeEngine: boolean;
-  engineEventHandlers: IRtcEngineEventHandler[];
-  mediaPlayerEventManager: {
+  rtcEventHandlers: IRtcEngineEventHandler[];
+  mpkEventHandlers: {
     mpk: IMediaPlayerImpl;
     handler: IMediaPlayerSourceObserver;
   }[];
+  mpkAudioFrameObservers: {
+    mpk: IMediaPlayerImpl;
+    handler: IMediaPlayerAudioFrameObserver;
+  }[];
+  mpkVideoFrameObservers: {
+    mpk: IMediaPlayerImpl;
+    handler: IMediaPlayerVideoFrameObserver;
+  }[];
+  mpkAudioSpectrumObservers: {
+    mpk: IMediaPlayerImpl;
+    handler: IAudioSpectrumObserver;
+  }[];
   metadataObservers: IMetadataObserver[];
+  rtcVideoFrameObservers: IVideoFrameObserver[];
+  rtcVideoEncodedFrameObservers: IVideoEncodedFrameObserver[];
+  rtcAudioFrameObservers: IAudioFrameObserver[];
+  rtcAudioSpectrumObservers: IAudioSpectrumObserver[];
+  rtcAudioEncodedFrameObservers: IAudioEncodedFrameObserver[];
   cdnEventHandlers: IDirectCdnStreamingEventHandler[];
   AgoraElectronBridge?: AgoraElectronBridge;
   AgoraRendererManager?: RendererManager;
-  AgoraAudioDeviceManager: IAudioDeviceManager;
-  AgoraVideoDeviceManager: IVideoDeviceManager;
 }
 
 export interface CanvasOptions {
@@ -93,6 +109,7 @@ export interface Result {
 export enum CallBackModule {
   RTC = 0,
   MPK,
+  OBSERVER,
 }
 
 export interface AgoraElectronBridge {
@@ -103,14 +120,14 @@ export interface AgoraElectronBridge {
       event: string,
       data: string,
       buffer: Uint8Array[],
-      bufferLength: number,
+      bufferLength: number[],
       bufferCount: number
     ) => void
   ): void;
   CallApi(
     funcName: string,
     params: any,
-    buffer?: Uint8Array[],
+    buffer?: (Uint8Array | undefined)[],
     bufferCount?: number
   ): Result;
   InitializeEnv(): void;
@@ -119,7 +136,7 @@ export interface AgoraElectronBridge {
   EnableVideoFrameCache(config: VideoFrameCacheConfig): void;
   DisableVideoFrameCache(config: VideoFrameCacheConfig): void;
   GetBuffer(ptr: number, length: number): Buffer;
-  GetVideoStreamData(streamInfo: ShareVideoFrame): {
+  GetVideoFrame(streamInfo: ShareVideoFrame): {
     ret: number;
     isNewFrame: boolean;
     yStride: number;

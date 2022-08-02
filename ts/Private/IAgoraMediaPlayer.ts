@@ -1,5 +1,5 @@
-import { PlayerStreamInfo, MediaPlayerState } from './AgoraMediaPlayerTypes'
-import { RenderModeType, AudioDualMonoMode } from './AgoraMediaBase'
+import { MediaSource, PlayerStreamInfo, MediaPlayerState } from './AgoraMediaPlayerTypes'
+import { RenderModeType, IAudioSpectrumObserver, AudioDualMonoMode, AudioPcmFrame, VideoFrame } from './AgoraMediaBase'
 import { IMediaPlayerSourceObserver } from './IAgoraMediaPlayerSource'
 import { SpatialAudioParams } from './AgoraBase'
 
@@ -28,6 +28,11 @@ abstract getMediaPlayerId(): number;
  * < 0: Failure.
  */
 abstract open(url: string, startPos: number): number;
+
+/*
+ * @ignore
+ */
+abstract openWithMediaSource(source: MediaSource): number;
 
 /*
  * Plays the media file.
@@ -148,26 +153,6 @@ abstract setLoopCount(loopCount: number): number;
 /*
  * @ignore
  */
-abstract muteAudio(audioMute: boolean): number;
-
-/*
- * @ignore
- */
-abstract isAudioMuted(): boolean;
-
-/*
- * @ignore
- */
-abstract muteVideo(videoMute: boolean): number;
-
-/*
- * @ignore
- */
-abstract isVideoMuted(): boolean;
-
-/*
- * @ignore
- */
 abstract setPlaybackSpeed(speed: number): number;
 
 /*
@@ -209,7 +194,7 @@ abstract getState(): MediaPlayerState;
  * 0: Success.
  * < 0: Failure.
  */
-abstract mute(mute: boolean): number;
+abstract mute(muted: boolean): number;
 
 /*
  * Reports whether the media resource is muted.
@@ -312,6 +297,24 @@ abstract unregisterPlayerSourceObserver(observer: IMediaPlayerSourceObserver): n
 /*
  * @ignore
  */
+abstract registerMediaPlayerAudioSpectrumObserver(observer: IAudioSpectrumObserver, intervalInMS: number): number;
+
+/*
+ * @ignore
+ */
+abstract unregisterMediaPlayerAudioSpectrumObserver(observer: IAudioSpectrumObserver): number;
+
+/*
+ * Sets the channel mode of the current audio file.
+ * In a stereo music file, the left and right channels can store different audio data. According to your needs, you can set the channel mode to original mode, left channel mode, right channel mode, or mixed channel mode. For example, in the KTV scenario, the left channel of the music file stores the musical accompaniment, and the right channel stores the singing voice. If you only need to listen to the accompaniment, call this method to set the channel mode of the music file to left channel mode; if you need to listen to the accompaniment and the singing voice at the same time, call this method to set the channel mode to mixed channel mode. Call this method after calling open .
+ * This method only applies to stereo audio files.
+ *
+ * @param mode The channel mode. See AudioDualMonoMode .
+ *
+ * @returns
+ * 0: Success.
+ * < 0: Failure.
+ */
 abstract setAudioDualMonoMode(mode: AudioDualMonoMode): number;
 
 /*
@@ -387,10 +390,115 @@ abstract setSpatialAudioParams(params: SpatialAudioParams): number;
 /*
  * @ignore
  */
+abstract setSoundPositionParams(pan: number, gain: number): number;
+
+/*
+ * @ignore
+ */
+abstract registerAudioFrameObserver(observer: IMediaPlayerAudioFrameObserver): number;
+
+/*
+ * @ignore
+ */
+abstract unregisterAudioFrameObserver(observer: IMediaPlayerAudioFrameObserver): number;
+
+/*
+ * @ignore
+ */
+abstract registerVideoFrameObserver(observer: IMediaPlayerVideoFrameObserver): number;
+
+/*
+ * @ignore
+ */
+abstract unregisterVideoFrameObserver(observer: IMediaPlayerVideoFrameObserver): number;
+
+/*
+ * @ignore
+ */
 abstract setPlayerOptionInInt(key: string, value: number): number;
 
 /*
  * @ignore
  */
 abstract setPlayerOptionInString(key: string, value: string): number;
+}
+
+/*
+ * @ignore
+ */
+export abstract class IMediaPlayerCacheManager {
+/*
+ * @ignore
+ */
+abstract removeAllCaches(): number;
+
+/*
+ * @ignore
+ */
+abstract removeOldCache(): number;
+
+/*
+ * @ignore
+ */
+abstract removeCacheByUri(uri: string): number;
+
+/*
+ * @ignore
+ */
+abstract setCacheDir(path: string): number;
+
+/*
+ * @ignore
+ */
+abstract setMaxCacheFileCount(count: number): number;
+
+/*
+ * @ignore
+ */
+abstract setMaxCacheFileSize(cacheSize: number): number;
+
+/*
+ * @ignore
+ */
+abstract enableAutoRemoveCache(enable: boolean): number;
+
+/*
+ * @ignore
+ */
+abstract getCacheDir(length: number): string;
+
+/*
+ * @ignore
+ */
+abstract getMaxCacheFileCount(): number;
+
+/*
+ * @ignore
+ */
+abstract getMaxCacheFileSize(): number;
+
+/*
+ * @ignore
+ */
+abstract getCacheFileCount(): number;
+}
+
+/*
+ * @ignore
+ */
+export abstract class IMediaPlayerAudioFrameObserver {
+/*
+ * @ignore
+ */
+  onFrame?(frame: AudioPcmFrame): void;
+}
+
+/*
+ * @ignore
+ */
+export abstract class IMediaPlayerVideoFrameObserver {
+/*
+ * @ignore
+ */
+  onFrame?(frame: VideoFrame): void;
 }

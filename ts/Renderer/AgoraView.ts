@@ -19,6 +19,7 @@ const observedAttributes = [
 declare global {
   /*
    * Attributes of the Agora custom element.
+   * You can use this custom element as follows: <agora-view video-source-type="{VideoSourceType.VideoSourceCamera}" channel-id="" uid="{0}"></agora-view>
    */
   interface AgoraView {
     /*
@@ -42,7 +43,7 @@ declare global {
      */
     "renderer-mirror": boolean;
     /*
-     * The inline style of elements. See style 属性 .
+     * The inline style of elements. See style .
      */
     style: any;
   }
